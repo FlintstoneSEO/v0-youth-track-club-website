@@ -128,6 +128,19 @@ export function SiteFooter() {
               Founded by Ramon Brunson
             </p>
           </div>
+          <div className="mt-4 text-center">
+            <p className="text-xs text-primary-foreground/40">
+              Designed by{" "}
+              <a 
+                href="https://flintstoneseo.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-primary-foreground/60 hover:text-accent transition-colors underline underline-offset-2"
+              >
+                flintstoneseo.com
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </footer>
