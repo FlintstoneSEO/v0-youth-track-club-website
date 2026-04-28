@@ -1,8 +1,7 @@
 "use client"
 
-import type { Metadata } from "next"
 import { useState } from "react"
-import { Mail, MapPin, Send, CheckCircle } from "lucide-react"
+import { Mail, MapPin, Send, CheckCircle, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -15,20 +14,55 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { createClient } from "@/lib/supabase/client"
 
 export default function ContactPage() {
   const [signupSubmitted, setSignupSubmitted] = useState(false)
+  const [signupLoading, setSignupLoading] = useState(false)
+  const [signupError, setSignupError] = useState<string | null>(null)
   const [contactSubmitted, setContactSubmitted] = useState(false)
 
   const handleSignupSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    // This will connect to Supabase later
+    setSignupLoading(true)
+    setSignupError(null)
+
+    const formData = new FormData(e.currentTarget)
+    const supabase = createClient()
+
+    const { error } = await supabase.from('athlete_signups').insert([{
+      athlete_first_name: formData.get('athlete-first'),
+      athlete_last_name: formData.get('athlete-last'),
+      athlete_dob: formData.get('athlete-dob'),
+      athlete_gender: formData.get('athlete-gender') || null,
+      athlete_grade: formData.get('athlete-grade'),
+      athlete_school: formData.get('athlete-school') || null,
+      parent_first_name: formData.get('parent-first'),
+      parent_last_name: formData.get('parent-last'),
+      parent_email: formData.get('parent-email'),
+      parent_phone: formData.get('parent-phone'),
+      emergency_contact_name: formData.get('emergency-name') || null,
+      emergency_contact_phone: formData.get('emergency-phone') || null,
+      medical_conditions: formData.get('medical') || null,
+      experience_level: formData.get('experience') || 'beginner',
+      preferred_events: formData.get('events') ? (formData.get('events') as string).split(',').map(s => s.trim()) : null,
+      how_heard_about_us: formData.get('how-heard') || null,
+      status: 'pending',
+    }])
+
+    setSignupLoading(false)
+
+    if (error) {
+      setSignupError('There was an error submitting your registration. Please try again.')
+      return
+    }
+
     setSignupSubmitted(true)
   }
 
   const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    // This will connect to Supabase/email service later
+    // For now, just show success - in production, you'd send an email
     setContactSubmitted(true)
   }
 
@@ -77,27 +111,43 @@ export default function ContactPage() {
                   <form onSubmit={handleSignupSubmit} className="space-y-4">
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div className="space-y-2">
-                        <Label htmlFor="athlete-first">Athlete First Name</Label>
-                        <Input id="athlete-first" required placeholder="First name" />
+                        <Label htmlFor="athlete-first">Athlete First Name *</Label>
+                        <Input id="athlete-first" name="athlete-first" required placeholder="First name" />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="athlete-last">Athlete Last Name</Label>
-                        <Input id="athlete-last" required placeholder="Last name" />
+                        <Label htmlFor="athlete-last">Athlete Last Name *</Label>
+                        <Input id="athlete-last" name="athlete-last" required placeholder="Last name" />
                       </div>
                     </div>
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div className="space-y-2">
-                        <Label htmlFor="athlete-age">Athlete Age</Label>
-                        <Input id="athlete-age" type="number" required min="6" max="18" placeholder="Age" />
+                        <Label htmlFor="athlete-dob">Date of Birth *</Label>
+                        <Input id="athlete-dob" name="athlete-dob" type="date" required />
                       </div>
                       <div className="space-y-2">
+                        <Label htmlFor="athlete-gender">Gender</Label>
+                        <Select name="athlete-gender">
+                          <SelectTrigger id="athlete-gender">
+                            <SelectValue placeholder="Select gender" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="male">Male</SelectItem>
+                            <SelectItem value="female">Female</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
+                            <SelectItem value="prefer_not_to_say">Prefer not to say</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div className="space-y-2">
                         <Label htmlFor="athlete-grade">Grade Level</Label>
-                        <Select required>
+                        <Select name="athlete-grade">
                           <SelectTrigger id="athlete-grade">
                             <SelectValue placeholder="Select grade" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="k">Kindergarten</SelectItem>
+                            <SelectItem value="K">Kindergarten</SelectItem>
                             <SelectItem value="1">1st Grade</SelectItem>
                             <SelectItem value="2">2nd Grade</SelectItem>
                             <SelectItem value="3">3rd Grade</SelectItem>
@@ -113,50 +163,101 @@ export default function ContactPage() {
                           </SelectContent>
                         </Select>
                       </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="parent-name">Parent/Guardian Name</Label>
-                      <Input id="parent-name" required placeholder="Full name" />
-                    </div>
-                    <div className="grid gap-4 sm:grid-cols-2">
                       <div className="space-y-2">
-                        <Label htmlFor="parent-email">Email</Label>
-                        <Input id="parent-email" type="email" required placeholder="email@example.com" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="parent-phone">Phone</Label>
-                        <Input id="parent-phone" type="tel" required placeholder="(555) 555-5555" />
+                        <Label htmlFor="athlete-school">School</Label>
+                        <Input id="athlete-school" name="athlete-school" placeholder="School name" />
                       </div>
                     </div>
+                    
+                    <div className="border-t pt-4 mt-4">
+                      <h4 className="font-medium mb-4">Parent/Guardian Information</h4>
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label htmlFor="parent-first">First Name *</Label>
+                          <Input id="parent-first" name="parent-first" required placeholder="First name" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="parent-last">Last Name *</Label>
+                          <Input id="parent-last" name="parent-last" required placeholder="Last name" />
+                        </div>
+                      </div>
+                      <div className="grid gap-4 sm:grid-cols-2 mt-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="parent-email">Email *</Label>
+                          <Input id="parent-email" name="parent-email" type="email" required placeholder="email@example.com" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="parent-phone">Phone *</Label>
+                          <Input id="parent-phone" name="parent-phone" type="tel" required placeholder="(555) 555-5555" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="border-t pt-4 mt-4">
+                      <h4 className="font-medium mb-4">Emergency Contact</h4>
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label htmlFor="emergency-name">Name</Label>
+                          <Input id="emergency-name" name="emergency-name" placeholder="Emergency contact name" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="emergency-phone">Phone</Label>
+                          <Input id="emergency-phone" name="emergency-phone" type="tel" placeholder="(555) 555-5555" />
+                        </div>
+                      </div>
+                    </div>
+
                     <div className="space-y-2">
                       <Label htmlFor="experience">Track Experience</Label>
-                      <Select>
+                      <Select name="experience">
                         <SelectTrigger id="experience">
                           <SelectValue placeholder="Select experience level" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="none">No prior experience</SelectItem>
-                          <SelectItem value="some">Some experience (1 year or less)</SelectItem>
-                          <SelectItem value="moderate">Moderate experience (2-3 years)</SelectItem>
-                          <SelectItem value="experienced">Experienced (4+ years)</SelectItem>
+                          <SelectItem value="beginner">Beginner (no prior experience)</SelectItem>
+                          <SelectItem value="intermediate">Intermediate (1-2 years)</SelectItem>
+                          <SelectItem value="advanced">Advanced (3+ years)</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="events">Events of Interest (optional)</Label>
-                      <Input id="events" placeholder="e.g., Sprints, Long Jump, Distance" />
+                      <Input id="events" name="events" placeholder="e.g., Sprints, Long Jump, Distance" />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="notes">Additional Notes (optional)</Label>
+                      <Label htmlFor="medical">Medical Conditions/Allergies</Label>
                       <Textarea 
-                        id="notes" 
-                        placeholder="Any medical conditions, allergies, or other information we should know?"
+                        id="medical" 
+                        name="medical"
+                        placeholder="Any medical conditions, allergies, or other health information we should know?"
                         rows={3}
                       />
                     </div>
-                    <Button type="submit" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
-                      Submit Registration
-                      <Send className="ml-2 h-4 w-4" />
+                    <div className="space-y-2">
+                      <Label htmlFor="how-heard">How did you hear about us?</Label>
+                      <Input id="how-heard" name="how-heard" placeholder="e.g., Friend, Social Media, School" />
+                    </div>
+
+                    {signupError && (
+                      <p className="text-sm text-destructive">{signupError}</p>
+                    )}
+
+                    <Button 
+                      type="submit" 
+                      className="w-full bg-accent text-accent-foreground hover:bg-accent/90"
+                      disabled={signupLoading}
+                    >
+                      {signupLoading ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Submitting...
+                        </>
+                      ) : (
+                        <>
+                          Submit Registration
+                          <Send className="ml-2 h-4 w-4" />
+                        </>
+                      )}
                     </Button>
                   </form>
                 )}

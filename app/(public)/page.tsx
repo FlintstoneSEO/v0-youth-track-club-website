@@ -1,7 +1,8 @@
 import Link from "next/link"
-import { ArrowRight, Calendar, Clock, MapPin, Trophy, Users, Zap } from "lucide-react"
+import { ArrowRight, Calendar, MapPin, Trophy, Users, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { createClient } from "@/lib/supabase/server"
 
 const features = [
   {
@@ -21,30 +22,53 @@ const features = [
   },
 ]
 
-const upcomingEvents = [
-  {
-    title: "Spring Track Season Begins",
-    date: "March 15, 2026",
-    location: "Lansing Track Complex",
-    type: "Practice",
-  },
-  {
-    title: "Mid-Michigan Youth Meet",
-    date: "April 5, 2026",
-    location: "East Lansing High School",
-    type: "Competition",
-  },
-  {
-    title: "Run Tha City 517 Community Run",
-    date: "April 12, 2026",
-    location: "Downtown Lansing",
-    type: "Community",
-  },
-]
+async function getUpcomingEvents() {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('events')
+    .select('*')
+    .eq('is_published', true)
+    .gte('event_date', new Date().toISOString().split('T')[0])
+    .order('event_date', { ascending: true })
+    .limit(3)
+  
+  return data || []
+}
 
-export default function HomePage() {
+async function getLatestAnnouncement() {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('announcements')
+    .select('*')
+    .eq('is_published', true)
+    .eq('priority', 'urgent')
+    .order('published_at', { ascending: false })
+    .limit(1)
+    .single()
+  
+  return data
+}
+
+export default async function HomePage() {
+  const [upcomingEvents, latestAnnouncement] = await Promise.all([
+    getUpcomingEvents(),
+    getLatestAnnouncement(),
+  ])
+
   return (
     <>
+      {/* Urgent Announcement Banner */}
+      {latestAnnouncement && (
+        <div className="bg-accent text-accent-foreground py-3 px-4">
+          <div className="container mx-auto flex items-center justify-center gap-2 text-center">
+            <span className="font-medium">{latestAnnouncement.title}</span>
+            <Link href="/announcements" className="underline underline-offset-2 hover:no-underline">
+              Learn more
+            </Link>
+          </div>
+        </div>
+      )}
+
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-primary py-20 lg:py-32">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
@@ -136,43 +160,58 @@ export default function HomePage() {
               </Link>
             </Button>
           </div>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {upcomingEvents.map((event) => (
-              <Card key={event.title} className="overflow-hidden">
-                <div className={`h-2 ${
-                  event.type === "Practice" 
-                    ? "bg-primary" 
-                    : event.type === "Competition" 
-                    ? "bg-accent" 
-                    : "bg-success"
-                }`} />
-                <CardHeader>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-                    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                      event.type === "Practice" 
-                        ? "bg-primary/10 text-primary" 
-                        : event.type === "Competition" 
-                        ? "bg-accent/10 text-accent" 
-                        : "bg-success/10 text-success"
-                    }`}>
-                      {event.type}
-                    </span>
-                  </div>
-                  <CardTitle className="text-lg">{event.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Calendar className="h-4 w-4" />
-                    <span>{event.date}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <MapPin className="h-4 w-4" />
-                    <span>{event.location}</span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          {upcomingEvents.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">No upcoming events at this time. Check back soon!</p>
+            </div>
+          ) : (
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {upcomingEvents.map((event) => (
+                <Card key={event.id} className="overflow-hidden">
+                  <div className={`h-2 ${
+                    event.event_type === "practice" 
+                      ? "bg-primary" 
+                      : event.event_type === "meet" 
+                      ? "bg-accent" 
+                      : "bg-success"
+                  }`} />
+                  <CardHeader>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
+                      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${
+                        event.event_type === "practice" 
+                          ? "bg-primary/10 text-primary" 
+                          : event.event_type === "meet" 
+                          ? "bg-accent/10 text-accent" 
+                          : "bg-success/10 text-success"
+                      }`}>
+                        {event.event_type}
+                      </span>
+                    </div>
+                    <CardTitle className="text-lg">{event.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Calendar className="h-4 w-4" />
+                      <span>
+                        {new Date(event.event_date).toLocaleDateString('en-US', {
+                          weekday: 'short',
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric'
+                        })}
+                      </span>
+                    </div>
+                    {event.location && (
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <MapPin className="h-4 w-4" />
+                        <span>{event.location}</span>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

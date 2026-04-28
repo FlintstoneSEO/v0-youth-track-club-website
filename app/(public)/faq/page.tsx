@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, HelpCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Accordion,
@@ -8,91 +8,48 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { createClient } from "@/lib/supabase/server"
 
 export const metadata: Metadata = {
   title: "FAQ",
   description: "Frequently asked questions about Lansing Area Track Club programs, registration, and more.",
 }
 
-// These will be fetched from Supabase when connected
-const faqs = [
-  {
-    id: "1",
-    question: "What ages do you accept?",
-    answer: "Lansing Area Track Club accepts athletes from ages 6 through 18 (high school). We have age-appropriate programs for youth (6-12), middle school (12-14), and high school prep (14-18) athletes.",
-    category: "General",
-  },
-  {
-    id: "2",
-    question: "How much does it cost to join?",
-    answer: "Registration fees vary by season and program level. Our spring/summer season typically runs $75-125 depending on the program. Early bird discounts are available, and we offer payment plans and financial assistance for families who need it. Contact us for current pricing.",
-    category: "Registration",
-  },
-  {
-    id: "3",
-    question: "Does my child need prior track experience?",
-    answer: "No prior experience is necessary! We welcome athletes of all skill levels. Our youth program focuses on fundamentals and making track fun, while more advanced programs build competitive skills progressively.",
-    category: "General",
-  },
-  {
-    id: "4",
-    question: "What equipment does my child need?",
-    answer: "Athletes need comfortable athletic clothing and running shoes. Track spikes are optional and recommended only for more experienced athletes. We recommend bringing a water bottle, sunscreen for outdoor practices, and weather-appropriate layers.",
-    category: "Practices",
-  },
-  {
-    id: "5",
-    question: "Where are practices held?",
-    answer: "Practices are held at various Lansing-area high school tracks depending on the age group. Youth practices are at Sexton High School, middle school at Eastern High School, and high school prep at Everett High School. Check our Practices page for current locations.",
-    category: "Practices",
-  },
-  {
-    id: "6",
-    question: "How often are practices?",
-    answer: "Practice frequency depends on the age group. Youth athletes practice 2 days per week, middle school athletes practice 3 days per week, and high school prep athletes practice 5 days per week during the competitive season.",
-    category: "Practices",
-  },
-  {
-    id: "7",
-    question: "Will my child compete in meets?",
-    answer: "Yes! All athletes have opportunities to compete in local and regional track meets. Competition is optional for younger athletes, but we encourage participation as it's a great way to measure progress and build confidence.",
-    category: "Competitions",
-  },
-  {
-    id: "8",
-    question: "Do you require USATF membership?",
-    answer: "USATF membership is required for athletes who want to compete in USATF-sanctioned meets, including Junior Olympics qualifiers. We help families with the registration process. For local, non-sanctioned meets, USATF membership is not required.",
-    category: "Competitions",
-  },
-  {
-    id: "9",
-    question: "What is Run Tha City 517?",
-    answer: "Run Tha City 517 is our community running group, also founded by Ramon Brunson. It's open to all ages and skill levels and focuses on bringing the Lansing community together through running. We host regular group runs throughout the city.",
-    category: "Programs",
-  },
-  {
-    id: "10",
-    question: "How do I register my child?",
-    answer: "Registration is available through our Contact page. Fill out the athlete signup form, and our team will reach out with next steps including payment information and practice details.",
-    category: "Registration",
-  },
-  {
-    id: "11",
-    question: "Can parents watch practices?",
-    answer: "Yes, parents are welcome to watch practices from designated areas. We ask that parents allow coaches to work with athletes during practice time. Parent volunteers are always appreciated for help with meets and events!",
-    category: "Practices",
-  },
-  {
-    id: "12",
-    question: "What events do you teach?",
-    answer: "We teach all standard track and field events including sprints (100m, 200m, 400m), distance (800m, 1500m, 3000m), hurdles, relays, long jump, high jump, shot put, and discus. Event availability varies by age group and athlete interest.",
-    category: "Programs",
-  },
-]
+async function getFaqs() {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('faqs')
+    .select('*')
+    .eq('is_published', true)
+    .order('sort_order', { ascending: true })
+  
+  return data || []
+}
 
-const categories = [...new Set(faqs.map((faq) => faq.category))]
+const categoryLabels: Record<string, string> = {
+  general: 'General',
+  registration: 'Registration',
+  practices: 'Practices',
+  meets: 'Competitions',
+  equipment: 'Equipment',
+  other: 'Other',
+}
 
-export default function FAQPage() {
+export default async function FAQPage() {
+  const faqs = await getFaqs()
+  
+  // Group FAQs by category
+  const faqsByCategory = faqs.reduce((acc, faq) => {
+    const category = faq.category || 'general'
+    if (!acc[category]) {
+      acc[category] = []
+    }
+    acc[category].push(faq)
+    return acc
+  }, {} as Record<string, typeof faqs>)
+
+  const categories = Object.keys(faqsByCategory)
+
   return (
     <>
       {/* Hero Section */}
@@ -114,13 +71,24 @@ export default function FAQPage() {
       <section className="py-16 lg:py-24">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl">
-            {categories.map((category) => (
-              <div key={category} className="mb-12 last:mb-0">
-                <h2 className="text-2xl font-bold text-foreground mb-6">{category}</h2>
-                <Accordion type="single" collapsible className="space-y-4">
-                  {faqs
-                    .filter((faq) => faq.category === category)
-                    .map((faq) => (
+            {faqs.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="mx-auto h-16 w-16 rounded-full bg-muted flex items-center justify-center mb-6">
+                  <HelpCircle className="h-8 w-8 text-muted-foreground" />
+                </div>
+                <h2 className="text-2xl font-bold text-foreground">No FAQs Yet</h2>
+                <p className="mt-3 text-muted-foreground text-pretty">
+                  Check back soon for answers to common questions.
+                </p>
+              </div>
+            ) : (
+              categories.map((category) => (
+                <div key={category} className="mb-12 last:mb-0">
+                  <h2 className="text-2xl font-bold text-foreground mb-6">
+                    {categoryLabels[category] || category}
+                  </h2>
+                  <Accordion type="single" collapsible className="space-y-4">
+                    {faqsByCategory[category].map((faq) => (
                       <AccordionItem
                         key={faq.id}
                         value={faq.id}
@@ -129,14 +97,15 @@ export default function FAQPage() {
                         <AccordionTrigger className="text-left hover:no-underline py-4">
                           <span className="font-medium text-foreground">{faq.question}</span>
                         </AccordionTrigger>
-                        <AccordionContent className="pb-4 text-muted-foreground leading-relaxed">
+                        <AccordionContent className="pb-4 text-muted-foreground leading-relaxed whitespace-pre-line">
                           {faq.answer}
                         </AccordionContent>
                       </AccordionItem>
                     ))}
-                </Accordion>
-              </div>
-            ))}
+                  </Accordion>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </section>

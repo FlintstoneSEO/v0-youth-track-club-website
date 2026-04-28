@@ -3,45 +3,25 @@ import Link from "next/link"
 import { ArrowRight, Calendar, Clock, MapPin, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { createClient } from "@/lib/supabase/server"
 
 export const metadata: Metadata = {
   title: "Run Tha City 517",
   description: "Join Run Tha City 517, Lansing's community running group. Open to all ages and skill levels.",
 }
 
-// These will be fetched from Supabase when connected
-const upcomingRuns = [
-  {
-    id: "1",
-    title: "Downtown Loop",
-    date: "April 12, 2026",
-    time: "9:00 AM",
-    location: "Capitol Building, Downtown Lansing",
-    distance: "3 miles",
-    difficulty: "All Levels",
-    description: "Our signature route through downtown Lansing! Great for beginners and families.",
-  },
-  {
-    id: "2",
-    title: "River Trail Run",
-    date: "April 19, 2026",
-    time: "8:00 AM",
-    location: "Lansing River Trail - North Entrance",
-    distance: "5 miles",
-    difficulty: "Intermediate",
-    description: "Scenic run along the beautiful Lansing River Trail. Moderate pace, beautiful views.",
-  },
-  {
-    id: "3",
-    title: "MSU Campus Run",
-    date: "April 26, 2026",
-    time: "9:00 AM",
-    location: "Spartan Stadium, East Lansing",
-    distance: "4 miles",
-    difficulty: "All Levels",
-    description: "Tour the beautiful Michigan State campus on foot! Go Green!",
-  },
-]
+async function getUpcomingRuns() {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('run_tha_city_events')
+    .select('*')
+    .eq('is_published', true)
+    .gte('event_date', new Date().toISOString().split('T')[0])
+    .order('event_date', { ascending: true })
+    .limit(6)
+  
+  return data || []
+}
 
 const features = [
   {
@@ -61,7 +41,16 @@ const features = [
   },
 ]
 
-export default function RunThaCityPage() {
+const difficultyColors: Record<string, string> = {
+  all_levels: "bg-primary/10 text-primary",
+  beginner: "bg-green-100 text-green-700",
+  intermediate: "bg-amber-100 text-amber-700",
+  advanced: "bg-red-100 text-red-700",
+}
+
+export default async function RunThaCityPage() {
+  const upcomingRuns = await getUpcomingRuns()
+
   return (
     <>
       {/* Hero Section */}
@@ -124,42 +113,65 @@ export default function RunThaCityPage() {
               Upcoming Group Runs
             </h2>
             <p className="mt-4 text-lg text-muted-foreground text-pretty">
-              Join us for our weekly community runs. No registration required - just show up!
+              Join us for our community runs. No registration required - just show up!
             </p>
           </div>
-          <div className="grid gap-6 lg:grid-cols-3">
-            {upcomingRuns.map((run) => (
-              <Card key={run.id} className="overflow-hidden">
-                <div className="h-2 bg-accent" />
-                <CardHeader>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-accent/10 text-accent">
-                      {run.distance}
-                    </span>
-                    <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-primary/10 text-primary">
-                      {run.difficulty}
-                    </span>
-                  </div>
-                  <CardTitle className="text-xl">{run.title}</CardTitle>
-                  <CardDescription>{run.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Calendar className="h-4 w-4 text-accent" />
-                    <span>{run.date}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Clock className="h-4 w-4 text-accent" />
-                    <span>{run.time}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <MapPin className="h-4 w-4 text-accent" />
-                    <span>{run.location}</span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          {upcomingRuns.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">No upcoming runs scheduled at this time. Check back soon!</p>
+            </div>
+          ) : (
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {upcomingRuns.map((run) => (
+                <Card key={run.id} className="overflow-hidden">
+                  <div className="h-2 bg-accent" />
+                  <CardHeader>
+                    <div className="flex items-center gap-2 mb-2">
+                      {run.distance && (
+                        <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-accent/10 text-accent">
+                          {run.distance}
+                        </span>
+                      )}
+                      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${
+                        difficultyColors[run.difficulty] || difficultyColors.all_levels
+                      }`}>
+                        {run.difficulty?.replace('_', ' ') || 'All Levels'}
+                      </span>
+                    </div>
+                    <CardTitle className="text-xl">{run.title}</CardTitle>
+                    {run.description && (
+                      <CardDescription>{run.description}</CardDescription>
+                    )}
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Calendar className="h-4 w-4 text-accent" />
+                      <span>
+                        {new Date(run.event_date).toLocaleDateString('en-US', {
+                          weekday: 'short',
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric'
+                        })}
+                      </span>
+                    </div>
+                    {run.start_time && (
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <Clock className="h-4 w-4 text-accent" />
+                        <span>{run.start_time}</span>
+                      </div>
+                    )}
+                    {(run.location || run.meeting_point) && (
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <MapPin className="h-4 w-4 text-accent" />
+                        <span>{run.meeting_point || run.location}</span>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
