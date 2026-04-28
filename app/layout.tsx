@@ -15,17 +15,37 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Lansing Area Track Club | Youth Track & Field in Lansing, Michigan',
+    default: 'Lansing Area Track Club | Youth Track & Running Club in Lansing, MI',
     template: '%s | Lansing Area Track Club'
   },
-  description: 'Lansing Area Track Club offers youth track and field programs for kids through high school in Lansing, Michigan. Join our community of young athletes and discover the joy of running.',
-  keywords: ['track and field', 'youth sports', 'Lansing', 'Michigan', 'running', 'track club', 'athletics', 'kids sports'],
+  description: 'Lansing Area Track Club helps youth athletes in Lansing, Michigan build speed, endurance, confidence, and discipline through track, running, practices, meets, and community events.',
+  keywords: [
+    'Lansing Area Track Club',
+    'Lansing youth track club',
+    'youth track club Lansing MI',
+    'youth running club Lansing Michigan',
+    'kids track club Lansing',
+    'track and field club Lansing MI',
+    'youth sports Lansing MI',
+    'Lansing running club',
+    'Run Tha City 517',
+    'Lansing community running group',
+    'Lansing Juneteenth 5K',
+    'youth track training Lansing',
+    'Mid-Michigan youth track'
+  ],
   authors: [{ name: 'Ramon Brunson' }],
   openGraph: {
-    title: 'Lansing Area Track Club',
-    description: 'Youth track and field programs for kids through high school in Lansing, Michigan.',
+    title: 'Lansing Area Track Club | Youth Track & Running Club in Lansing, MI',
+    description: 'Lansing Area Track Club helps youth athletes in Lansing, Michigan build speed, endurance, confidence, and discipline through track, running, practices, meets, and community events.',
     locale: 'en_US',
     type: 'website',
+    siteName: 'Lansing Area Track Club',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Lansing Area Track Club',
+    description: 'Youth track and running programs for kids through high school in Lansing, Michigan.',
   },
   robots: {
     index: true,
@@ -34,7 +54,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#1e3a5f',
+  themeColor: '#1a1a1a',
   width: 'device-width',
   initialScale: 1,
 }

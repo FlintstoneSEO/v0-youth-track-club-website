@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRight, Calendar, MapPin, Trophy, Users, Zap } from "lucide-react"
+import { ArrowRight, Calendar, MapPin, Trophy, Users, Zap, Heart, Target } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { createClient } from "@/lib/supabase/server"
@@ -7,18 +7,18 @@ import { createClient } from "@/lib/supabase/server"
 const features = [
   {
     icon: Users,
-    title: "All Ages Welcome",
-    description: "Programs for youth through high school athletes of all skill levels.",
+    title: "Youth Through High School",
+    description: "Programs for athletes from elementary age through high school, including off-season speed and endurance training.",
   },
   {
-    icon: Trophy,
-    title: "Competitive Excellence",
-    description: "Prepare for local meets, regional competitions, and beyond.",
+    icon: Target,
+    title: "Proper Technique",
+    description: "Learn correct running form, track events, discipline, and athlete development from experienced coaches.",
   },
   {
-    icon: Zap,
-    title: "Expert Coaching",
-    description: "Learn from experienced coaches dedicated to your development.",
+    icon: Heart,
+    title: "Community Centered",
+    description: "More than a track club—we build confidence, character, and lasting connections in the Lansing community.",
   },
 ]
 
@@ -71,32 +71,41 @@ export default async function HomePage() {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-primary py-20 lg:py-32">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
+        {/* Track lane lines decoration */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-[10%] w-px h-full bg-primary-foreground" />
+          <div className="absolute top-0 left-[30%] w-px h-full bg-primary-foreground" />
+          <div className="absolute top-0 left-[50%] w-px h-full bg-primary-foreground" />
+          <div className="absolute top-0 left-[70%] w-px h-full bg-primary-foreground" />
+          <div className="absolute top-0 left-[90%] w-px h-full bg-primary-foreground" />
+        </div>
         <div className="container relative mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
             <div className="mb-6 inline-flex items-center rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-1.5">
               <span className="text-sm font-medium text-primary-foreground">
-                Now accepting registrations for Spring 2026
+                Serving Lansing &amp; Mid-Michigan Since 2015
               </span>
             </div>
             <h1 className="text-balance text-4xl font-bold tracking-tight text-primary-foreground sm:text-5xl lg:text-6xl">
-              Build Speed. Build Strength.{" "}
-              <span className="text-accent">Build Character.</span>
+              Lansing Area Track Club
             </h1>
+            <p className="mt-4 text-xl font-medium text-accent">
+              Youth Track &amp; Running in Lansing, Michigan
+            </p>
             <p className="mt-6 text-lg leading-relaxed text-primary-foreground/80 text-pretty">
-              Lansing Area Track Club is the premier youth track and field program in 
-              Mid-Michigan. We develop young athletes from beginner to competitive level 
-              in a supportive, community-focused environment.
+              Helping young athletes grow on and off the track. Led by Coach Ramon Brunson, 
+              we provide a positive environment where kids can build speed, endurance, confidence, 
+              discipline, and a love for running.
             </p>
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 w-full sm:w-auto">
                 <Link href="/contact">
-                  Register Your Athlete
+                  Join the Track Club
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg" className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 w-full sm:w-auto">
-                <Link href="/about">Learn More</Link>
+                <Link href="/practices">View Practices &amp; Meets</Link>
               </Button>
             </div>
           </div>
@@ -109,24 +118,45 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* About Preview */}
+      <section className="py-16 lg:py-20">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="text-lg leading-relaxed text-muted-foreground text-pretty">
+              Founded from a simple idea of getting kids together to train, Lansing Area Track Club 
+              has grown into a community-centered youth track program serving families across Lansing 
+              and Mid-Michigan. What started with a small group of children has become a place where 
+              young athletes learn proper technique, build character, and discover what they are 
+              capable of through hard work and consistency.
+            </p>
+            <Button asChild variant="link" className="mt-4">
+              <Link href="/about">
+                Learn more about our story
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* Features Section */}
-      <section className="py-16 lg:py-24">
+      <section className="py-16 lg:py-24 bg-muted">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-2xl text-center mb-12">
             <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl text-balance">
-              Why Choose Lansing Area Track Club?
+              Why Lansing Area Track Club?
             </h2>
             <p className="mt-4 text-lg text-muted-foreground text-pretty">
               We&apos;re more than just a track club. We&apos;re a community dedicated to 
-              developing young athletes on and off the track.
+              developing young athletes in Lansing, Michigan and the surrounding Mid-Michigan area.
             </p>
           </div>
           <div className="grid gap-8 md:grid-cols-3">
             {features.map((feature) => (
-              <Card key={feature.title} className="border-0 shadow-lg">
+              <Card key={feature.title} className="border-0 shadow-lg bg-card">
                 <CardHeader>
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                    <feature.icon className="h-6 w-6 text-primary" />
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-accent/10">
+                    <feature.icon className="h-6 w-6 text-accent" />
                   </div>
                   <CardTitle className="text-xl">{feature.title}</CardTitle>
                 </CardHeader>
@@ -142,7 +172,7 @@ export default async function HomePage() {
       </section>
 
       {/* Upcoming Events Section */}
-      <section className="bg-muted py-16 lg:py-24">
+      <section className="py-16 lg:py-24">
         <div className="container mx-auto px-4">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-12">
             <div>
@@ -150,7 +180,7 @@ export default async function HomePage() {
                 Upcoming Events
               </h2>
               <p className="mt-2 text-muted-foreground">
-                Stay updated with our latest practices and competitions.
+                Stay updated with our latest practices, meets, and community events.
               </p>
             </div>
             <Button asChild variant="outline">
@@ -161,7 +191,7 @@ export default async function HomePage() {
             </Button>
           </div>
           {upcomingEvents.length === 0 ? (
-            <div className="text-center py-12">
+            <div className="text-center py-12 bg-muted rounded-xl">
               <p className="text-muted-foreground">No upcoming events at this time. Check back soon!</p>
             </div>
           ) : (
@@ -216,21 +246,25 @@ export default async function HomePage() {
       </section>
 
       {/* Run Tha City 517 Section */}
-      <section className="py-16 lg:py-24 bg-gradient-to-br from-primary to-primary/80">
+      <section className="py-16 lg:py-24 bg-primary">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-4xl">
             <div className="grid gap-8 lg:grid-cols-2 items-center">
               <div>
                 <div className="mb-4 inline-flex items-center rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5">
-                  <span className="text-sm font-medium text-accent">Community Running</span>
+                  <span className="text-sm font-medium text-accent">Community Running Group</span>
                 </div>
                 <h2 className="text-3xl font-bold tracking-tight text-primary-foreground sm:text-4xl text-balance">
                   Run Tha City 517
                 </h2>
                 <p className="mt-4 text-lg leading-relaxed text-primary-foreground/80 text-pretty">
-                  Join our community running group and explore Lansing one mile at a time. 
-                  Open to all ages and skill levels. Whether you&apos;re training for your 
-                  first 5K or just want to stay active, you&apos;re welcome here.
+                  A Lansing running group created to bring people together through movement, 
+                  representation, and community. Rooted in the goal of helping more people get active, 
+                  Run Tha City 517 welcomes runners of all levels and helps connect Lansing residents 
+                  through group runs, local races, and shared accountability.
+                </p>
+                <p className="mt-4 text-sm text-primary-foreground/60">
+                  Started in June 2022, growing from a local conversation about Black runners in Lansing.
                 </p>
                 <div className="mt-8">
                   <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
@@ -242,14 +276,44 @@ export default async function HomePage() {
                 </div>
               </div>
               <div className="relative">
-                <div className="aspect-square rounded-2xl bg-primary-foreground/10 flex items-center justify-center">
+                <div className="aspect-square rounded-2xl bg-primary-foreground/10 flex items-center justify-center border border-primary-foreground/10">
                   <div className="text-center p-8">
-                    <div className="text-6xl font-bold text-accent mb-2">517</div>
-                    <div className="text-xl font-semibold text-primary-foreground">Run Tha City</div>
-                    <div className="text-primary-foreground/60 mt-2">Lansing, MI</div>
+                    <div className="text-7xl font-bold text-accent mb-2">517</div>
+                    <div className="text-2xl font-semibold text-primary-foreground">Run Tha City</div>
+                    <div className="text-primary-foreground/60 mt-2">Lansing, Michigan</div>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Juneteenth 5K Section */}
+      <section className="py-16 lg:py-24 bg-success/10">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto max-w-4xl text-center">
+            <div className="mb-4 inline-flex items-center rounded-full bg-success/20 px-4 py-1.5">
+              <span className="text-sm font-medium text-success">Community Race</span>
+            </div>
+            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl text-balance">
+              Lansing Juneteenth 5K Run/Walk/Roll
+            </h2>
+            <p className="mt-4 text-lg leading-relaxed text-muted-foreground text-pretty max-w-2xl mx-auto">
+              Join the community for a meaningful 3.1-mile event at Benjamin Davis Park. 
+              Hosted in partnership with Lansing Area Track Club and Run Tha City 517, the event 
+              welcomes runners, walkers, families, teams, strollers, and wheelchair participants.
+            </p>
+            <p className="mt-4 text-sm text-muted-foreground">
+              Proceeds and donations support our vision for a year-round indoor practice facility for youth athletes.
+            </p>
+            <div className="mt-8">
+              <Button asChild size="lg" className="bg-success text-success-foreground hover:bg-success/90">
+                <Link href="/juneteenth-5k">
+                  Learn More About the 5K
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
             </div>
           </div>
         </div>
@@ -263,13 +327,13 @@ export default async function HomePage() {
               Ready to Start Your Track Journey?
             </h2>
             <p className="mt-4 text-lg text-muted-foreground text-pretty">
-              Join hundreds of young athletes who have discovered their passion for 
+              Join the growing community of young athletes discovering their passion for 
               track and field at Lansing Area Track Club.
             </p>
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 w-full sm:w-auto">
+              <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 w-full sm:w-auto">
                 <Link href="/contact">
-                  Register Today
+                  Register Your Athlete
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>

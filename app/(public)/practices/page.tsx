@@ -5,8 +5,14 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 export const metadata: Metadata = {
-  title: "Practices",
-  description: "View practice schedules, locations, and what to expect at Lansing Area Track Club training sessions.",
+  title: "Practice Schedule | Lansing Area Track Club",
+  description: "View Lansing Area Track Club practice information, training updates, locations, and important details for youth athletes and parents in Lansing, Michigan.",
+  keywords: [
+    "youth track practice Lansing",
+    "track practice schedule Lansing MI",
+    "kids running practice Lansing",
+    "youth athletics training Mid-Michigan"
+  ],
 }
 
 const practiceSchedule = [

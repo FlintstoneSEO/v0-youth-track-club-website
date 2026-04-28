@@ -14,8 +14,9 @@ const navigation = [
   { name: "Events", href: "/events" },
   { name: "Announcements", href: "/announcements" },
   { name: "FAQ", href: "/faq" },
-  { name: "Contact", href: "/contact" },
   { name: "Run Tha City 517", href: "/run-tha-city-517" },
+  { name: "Juneteenth 5K", href: "/juneteenth-5k" },
+  { name: "Contact", href: "/contact" },
 ]
 
 export function SiteHeader() {

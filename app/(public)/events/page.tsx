@@ -6,8 +6,15 @@ import { Card } from "@/components/ui/card"
 import { createClient } from "@/lib/supabase/server"
 
 export const metadata: Metadata = {
-  title: "Meets & Events",
-  description: "View upcoming track meets, competitions, and community events hosted by Lansing Area Track Club.",
+  title: "Meets, Events & Local Races | Lansing Area Track Club",
+  description: "Find upcoming youth track meets, Lansing running events, local races, and community race opportunities connected to Lansing Area Track Club.",
+  keywords: [
+    "youth track meets Lansing MI",
+    "Lansing track events",
+    "local races Lansing Michigan",
+    "Lansing Juneteenth 5K",
+    "youth running events Mid-Michigan"
+  ],
 }
 
 async function getEvents() {

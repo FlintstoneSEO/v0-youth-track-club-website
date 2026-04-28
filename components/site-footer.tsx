@@ -11,7 +11,7 @@ const quickLinks = [
 const programLinks = [
   { name: "Youth Track", href: "/about#programs" },
   { name: "Run Tha City 517", href: "/run-tha-city-517" },
-  { name: "Volunteer", href: "/contact#volunteer" },
+  { name: "Juneteenth 5K", href: "/juneteenth-5k" },
   { name: "Sponsors", href: "/about#sponsors" },
 ]
 
@@ -32,8 +32,8 @@ export function SiteFooter() {
               </div>
             </div>
             <p className="text-sm text-primary-foreground/80 leading-relaxed">
-              Empowering young athletes in Lansing, Michigan through track and field. 
-              Building speed, strength, and character since day one.
+              Helping youth athletes in Lansing, Michigan build speed, endurance, confidence, 
+              and discipline through track, running, and community since 2015.
             </p>
             <div className="flex gap-4">
               <a 
