@@ -2,8 +2,9 @@
 
 import * as React from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Menu, X, ChevronDown } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -27,10 +28,15 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <nav className="container mx-auto flex h-16 items-center justify-between px-4 lg:px-8">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary">
-            <span className="text-lg font-bold text-primary-foreground">L</span>
-          </div>
+        <Link href="/" className="flex items-center gap-2">
+          <Image
+            src="/images/latc-logo.jpg"
+            alt="Lansing Area Track Club"
+            width={48}
+            height={48}
+            className="h-12 w-auto"
+            priority
+          />
           <div className="hidden sm:block">
             <p className="text-sm font-bold leading-tight text-foreground">Lansing Area</p>
             <p className="text-sm font-bold leading-tight text-primary">Track Club</p>

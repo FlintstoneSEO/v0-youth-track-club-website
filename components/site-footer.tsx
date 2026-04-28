@@ -1,5 +1,6 @@
 import Link from "next/link"
-import { Facebook, Instagram, Mail, MapPin, Phone } from "lucide-react"
+import Image from "next/image"
+import { Facebook, Instagram, Mail, MapPin } from "lucide-react"
 
 const quickLinks = [
   { name: "About Us", href: "/about" },
@@ -23,9 +24,13 @@ export function SiteFooter() {
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent">
-                <span className="text-lg font-bold text-accent-foreground">L</span>
-              </div>
+              <Image
+                src="/images/latc-logo.jpg"
+                alt="Lansing Area Track Club"
+                width={56}
+                height={56}
+                className="h-14 w-auto rounded-lg bg-white p-1"
+              />
               <div>
                 <p className="text-sm font-bold leading-tight">Lansing Area</p>
                 <p className="text-sm font-bold leading-tight text-accent">Track Club</p>

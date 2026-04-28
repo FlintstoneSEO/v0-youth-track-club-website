@@ -1,5 +1,6 @@
 import Link from "next/link"
-import { ArrowRight, Calendar, MapPin, Trophy, Users, Zap, Heart, Target } from "lucide-react"
+import Image from "next/image"
+import { ArrowRight, Calendar, MapPin, Users, Heart, Target } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { createClient } from "@/lib/supabase/server"
@@ -81,7 +82,18 @@ export default async function HomePage() {
         </div>
         <div className="container relative mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
-            <div className="mb-6 inline-flex items-center rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-1.5">
+            {/* LATC Logo */}
+            <div className="mb-6 flex justify-center">
+              <Image
+                src="/images/latc-logo.jpg"
+                alt="Lansing Area Track Club - Two runners in lime green and royal blue"
+                width={180}
+                height={180}
+                className="h-auto w-40 sm:w-44 lg:w-48 rounded-xl bg-white p-2 shadow-lg"
+                priority
+              />
+            </div>
+            <div className="mb-4 inline-flex items-center rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-1.5">
               <span className="text-sm font-medium text-primary-foreground">
                 Serving Lansing &amp; Mid-Michigan Since 2015
               </span>
@@ -245,29 +257,29 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Run Tha City 517 Section */}
-      <section className="py-16 lg:py-24 bg-primary">
+      {/* Run Tha City 517 Section - Red/Black/White theme */}
+      <section className="py-16 lg:py-24 bg-neutral-900">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-4xl">
             <div className="grid gap-8 lg:grid-cols-2 items-center">
               <div>
-                <div className="mb-4 inline-flex items-center rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5">
-                  <span className="text-sm font-medium text-accent">Community Running Group</span>
+                <div className="mb-4 inline-flex items-center rounded-full border border-red-500/30 bg-red-600/10 px-4 py-1.5">
+                  <span className="text-sm font-medium text-red-400">Community Running Group</span>
                 </div>
-                <h2 className="text-3xl font-bold tracking-tight text-primary-foreground sm:text-4xl text-balance">
+                <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl text-balance">
                   Run Tha City 517
                 </h2>
-                <p className="mt-4 text-lg leading-relaxed text-primary-foreground/80 text-pretty">
+                <p className="mt-4 text-lg leading-relaxed text-white/80 text-pretty">
                   A Lansing running group created to bring people together through movement, 
                   representation, and community. Rooted in the goal of helping more people get active, 
                   Run Tha City 517 welcomes runners of all levels and helps connect Lansing residents 
                   through group runs, local races, and shared accountability.
                 </p>
-                <p className="mt-4 text-sm text-primary-foreground/60">
+                <p className="mt-4 text-sm text-white/60">
                   Started in June 2022, growing from a local conversation about Black runners in Lansing.
                 </p>
                 <div className="mt-8">
-                  <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
+                  <Button asChild size="lg" className="bg-red-600 text-white hover:bg-red-700">
                     <Link href="/run-tha-city-517">
                       Join the Movement
                       <ArrowRight className="ml-2 h-4 w-4" />
@@ -275,14 +287,14 @@ export default async function HomePage() {
                   </Button>
                 </div>
               </div>
-              <div className="relative">
-                <div className="aspect-square rounded-2xl bg-primary-foreground/10 flex items-center justify-center border border-primary-foreground/10">
-                  <div className="text-center p-8">
-                    <div className="text-7xl font-bold text-accent mb-2">517</div>
-                    <div className="text-2xl font-semibold text-primary-foreground">Run Tha City</div>
-                    <div className="text-primary-foreground/60 mt-2">Lansing, Michigan</div>
-                  </div>
-                </div>
+              <div className="relative flex items-center justify-center">
+                <Image
+                  src="/images/run-tha-city-517-logo.png"
+                  alt="Run Tha City 517 - Lansing community running group"
+                  width={400}
+                  height={250}
+                  className="w-full max-w-sm h-auto"
+                />
               </div>
             </div>
           </div>
