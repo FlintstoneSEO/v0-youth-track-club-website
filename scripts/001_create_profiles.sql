@@ -27,14 +27,34 @@ CREATE POLICY "profiles_update_own" ON public.profiles
 CREATE POLICY "profiles_insert_own" ON public.profiles
   FOR INSERT WITH CHECK (auth.uid() = id);
 
--- Admins can view all profiles
-CREATE POLICY "profiles_select_admin" ON public.profiles
-  FOR SELECT USING (
-    EXISTS (
-      SELECT 1 FROM public.profiles
-      WHERE id = auth.uid() AND role IN ('admin', 'super_admin')
-    )
+-- Helper used by RLS policies. Keep SECURITY DEFINER functions out of exposed schemas
+-- so they cannot be called through the public Data API.
+CREATE SCHEMA IF NOT EXISTS private;
+
+CREATE OR REPLACE FUNCTION private.current_user_is_admin()
+RETURNS BOOLEAN
+LANGUAGE SQL
+SECURITY DEFINER
+SET search_path = public
+AS $$
+  SELECT EXISTS (
+    SELECT 1
+    FROM public.profiles
+    WHERE id = auth.uid()
+      AND role IN ('admin', 'super_admin')
   );
+$$;
+
+REVOKE ALL ON FUNCTION private.current_user_is_admin() FROM PUBLIC;
+GRANT USAGE ON SCHEMA private TO anon;
+GRANT USAGE ON SCHEMA private TO authenticated;
+GRANT EXECUTE ON FUNCTION private.current_user_is_admin() TO anon;
+GRANT EXECUTE ON FUNCTION private.current_user_is_admin() TO authenticated;
+
+-- Admins can view all profiles without recursively querying profiles in the policy.
+DROP POLICY IF EXISTS "profiles_select_admin" ON public.profiles;
+CREATE POLICY "profiles_select_admin" ON public.profiles
+  FOR SELECT USING (private.current_user_is_admin());
 
 -- Trigger to auto-create profile on user signup
 CREATE OR REPLACE FUNCTION public.handle_new_user()
