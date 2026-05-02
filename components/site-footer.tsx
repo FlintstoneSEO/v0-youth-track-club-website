@@ -141,7 +141,7 @@ export function SiteFooter() {
                 rel="noopener noreferrer"
                 className="text-primary-foreground/60 hover:text-accent transition-colors underline underline-offset-2"
               >
-                flintstoneseo.com
+                Flintstone SEO
               </a>
             </p>
           </div>
