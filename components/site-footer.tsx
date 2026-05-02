@@ -1,6 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Facebook, Instagram, Mail, MapPin } from "lucide-react"
+import { siteConfig } from "@/lib/site"
 
 const quickLinks = [
   { name: "About Us", href: "/about" },
@@ -39,6 +40,9 @@ export function SiteFooter() {
             <p className="text-sm text-primary-foreground/80 leading-relaxed">
               Helping youth athletes in Lansing, Michigan build speed, endurance, confidence, 
               and discipline through track, running, and community since 2015.
+            </p>
+            <p className="text-xs leading-relaxed text-primary-foreground/70">
+              Serving {siteConfig.areaServed.slice(0, 6).join(", ")} and surrounding Mid-Michigan communities.
             </p>
             <div className="flex gap-4">
               <a 
@@ -103,7 +107,7 @@ export function SiteFooter() {
               <li className="flex items-start gap-3">
                 <MapPin className="h-5 w-5 text-accent shrink-0 mt-0.5" />
                 <span className="text-sm text-primary-foreground/80">
-                  Lansing, Michigan
+                  Lansing, Michigan and Mid-Michigan
                 </span>
               </li>
               <li className="flex items-center gap-3">

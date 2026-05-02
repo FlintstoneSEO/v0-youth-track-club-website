@@ -5,8 +5,14 @@ import { createClient } from "@/lib/supabase/server"
 import type { SupabaseRow } from "@/lib/supabase/rows"
 
 export const metadata: Metadata = {
-  title: "Announcements",
-  description: "Stay updated with the latest news and announcements from Lansing Area Track Club.",
+  title: "Club Announcements & Updates",
+  description: "Stay updated with Lansing Area Track Club news, practice updates, registration reminders, youth track announcements, and important information for Lansing families.",
+  keywords: [
+    "Lansing Area Track Club announcements",
+    "Lansing youth track updates",
+    "track practice updates Lansing MI",
+    "youth sports announcements Lansing",
+  ],
 }
 
 async function getAnnouncements(): Promise<SupabaseRow[]> {

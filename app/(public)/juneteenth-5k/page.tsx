@@ -69,7 +69,7 @@ export default function JuneteenthPage() {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="border-success-foreground/20 text-success-foreground hover:bg-success-foreground/10 w-full sm:w-auto">
+              <Button asChild variant="outline" size="lg" className="border-success-foreground/30 bg-success-foreground text-success hover:bg-success-foreground/90 hover:text-success w-full sm:w-auto">
                 <Link href="/contact">Volunteer</Link>
               </Button>
             </div>

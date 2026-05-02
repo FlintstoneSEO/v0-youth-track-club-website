@@ -12,8 +12,14 @@ import { createClient } from "@/lib/supabase/server"
 import type { SupabaseRow } from "@/lib/supabase/rows"
 
 export const metadata: Metadata = {
-  title: "FAQ",
-  description: "Frequently asked questions about Lansing Area Track Club programs, registration, and more.",
+  title: "Youth Track FAQ | Registration, Practices & Meets",
+  description: "Answers to common questions about Lansing Area Track Club registration, youth track practices, meets, equipment, age groups, and running programs in Lansing, Michigan.",
+  keywords: [
+    "Lansing youth track FAQ",
+    "kids track registration questions Lansing",
+    "youth track practice questions Lansing MI",
+    "Lansing Area Track Club registration",
+  ],
 }
 
 async function getFaqs(): Promise<SupabaseRow[]> {

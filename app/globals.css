@@ -20,7 +20,7 @@
   --muted: oklch(0.94 0.01 250);
   --muted-foreground: oklch(0.50 0.05 250);
   /* Lime Green accent - from LATC logo, for CTAs */
-  --accent: oklch(0.75 0.22 125);
+  --accent: oklch(0.58 0.18 135);
   --accent-foreground: oklch(0.20 0.05 145);
   --destructive: oklch(0.55 0.22 25);
   --destructive-foreground: oklch(0.98 0 0);
@@ -31,7 +31,7 @@
   --rtc-red: oklch(0.55 0.25 25);
   --rtc-red-foreground: oklch(0.98 0 0);
   /* Success green */
-  --success: oklch(0.65 0.20 145);
+  --success: oklch(0.50 0.16 145);
   --success-foreground: oklch(0.98 0 0);
   /* Gold - achievement, medals */
   --gold: oklch(0.78 0.15 85);
@@ -66,7 +66,7 @@
   --secondary-foreground: oklch(0.95 0 0);
   --muted: oklch(0.28 0.06 250);
   --muted-foreground: oklch(0.65 0.03 250);
-  --accent: oklch(0.75 0.22 125);
+  --accent: oklch(0.72 0.20 135);
   --accent-foreground: oklch(0.20 0.05 145);
   --destructive: oklch(0.55 0.22 25);
   --destructive-foreground: oklch(0.95 0 0);
@@ -75,7 +75,7 @@
   --ring: oklch(0.75 0.22 125);
   --rtc-red: oklch(0.60 0.25 25);
   --rtc-red-foreground: oklch(0.98 0 0);
-  --success: oklch(0.65 0.20 145);
+  --success: oklch(0.68 0.18 145);
   --success-foreground: oklch(0.95 0 0);
   --gold: oklch(0.78 0.15 85);
   --gold-foreground: oklch(0.18 0 0);

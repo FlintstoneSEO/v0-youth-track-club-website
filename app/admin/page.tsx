@@ -9,9 +9,49 @@ import {
   Activity,
   Building2,
   TrendingUp,
-  Clock
+  Clock,
+  BookOpen,
+  Eye,
 } from 'lucide-react'
 import Link from 'next/link'
+
+const contentGuide = [
+  {
+    title: 'Announcements',
+    href: '/admin/announcements',
+    icon: Megaphone,
+    use: 'Post urgent weather updates, registration reminders, meet results, and club news.',
+    tip: 'Use a clear title, put the most important detail first, and publish only when families should see it.',
+  },
+  {
+    title: 'Events',
+    href: '/admin/events',
+    icon: Calendar,
+    use: 'Add practices, track meets, community runs, fundraisers, and special dates.',
+    tip: 'Include the date, time, location, event type, and registration link when one exists.',
+  },
+  {
+    title: 'FAQs',
+    href: '/admin/faqs',
+    icon: HelpCircle,
+    use: 'Answer repeat parent questions about registration, practices, equipment, meets, and age groups.',
+    tip: 'Write questions the way parents would ask them, then keep answers direct and searchable.',
+  },
+  {
+    title: 'Run Tha City 517',
+    href: '/admin/run-tha-city',
+    icon: Activity,
+    use: 'Share group runs, route details, difficulty, meeting spots, and community running updates.',
+    tip: 'Mark beginner-friendly runs clearly so new runners know they are welcome.',
+  },
+  {
+    title: 'Sponsors',
+    href: '/admin/sponsors',
+    icon: Building2,
+    use: 'Add supporters, sponsor levels, logos, websites, and donation partners.',
+    tip: 'Use accurate business names and links so sponsors get visible credit on the site.',
+  },
+]
 
 async function getStats() {
   const supabase = await createClient()
@@ -129,6 +169,52 @@ export default async function AdminDashboardPage() {
           Quick overview of your track club management
         </p>
       </div>
+
+      {/* Content Guide */}
+      <Card className="border-primary/20 bg-secondary/60">
+        <CardHeader>
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2 text-xl">
+                <BookOpen className="h-5 w-5 text-primary" />
+                Content Guide
+              </CardTitle>
+              <CardDescription className="mt-2 max-w-3xl">
+                Use this guide when adding new site content. The goal is simple: keep families informed,
+                make updates easy to find, and help local searches understand that LATC serves Lansing
+                and Mid-Michigan youth athletes.
+              </CardDescription>
+            </div>
+            <Link
+              href="/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+            >
+              <Eye className="h-4 w-4" />
+              Preview public site
+            </Link>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-4 lg:grid-cols-5">
+            {contentGuide.map((item) => (
+              <Link
+                key={item.title}
+                href={item.href}
+                className="rounded-lg border border-border bg-card p-4 transition-colors hover:border-primary/50"
+              >
+                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-md bg-primary/10">
+                  <item.icon className="h-5 w-5 text-primary" />
+                </div>
+                <h3 className="font-semibold text-foreground">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.use}</p>
+                <p className="mt-3 text-xs leading-relaxed text-foreground">{item.tip}</p>
+              </Link>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Stats Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

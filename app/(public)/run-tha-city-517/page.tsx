@@ -65,14 +65,17 @@ export default async function RunThaCityPage() {
     <>
       {/* Hero Section - RTC Red/Black/White theme */}
       <section className="relative overflow-hidden bg-neutral-900 py-20 lg:py-32">
-        {/* Track lane lines decoration */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-[10%] w-px h-full bg-white" />
-          <div className="absolute top-0 left-[30%] w-px h-full bg-white" />
-          <div className="absolute top-0 left-[50%] w-px h-full bg-white" />
-          <div className="absolute top-0 left-[70%] w-px h-full bg-white" />
-          <div className="absolute top-0 left-[90%] w-px h-full bg-white" />
-        </div>
+        <Image
+          src="/images/run-tha-city-lansing-hero.png"
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover"
+          priority
+          aria-hidden="true"
+        />
+        <div className="absolute inset-0 bg-neutral-950/68" />
+        <div className="absolute inset-0 bg-gradient-to-b from-neutral-950/35 via-neutral-950/30 to-neutral-950/80" />
         <div className="container relative mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
             {/* RTC Logo */}

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { createClient } from "@/lib/supabase/server"
 import type { SupabaseRow } from "@/lib/supabase/rows"
+import { siteConfig } from "@/lib/site"
 
 const features = [
   {
@@ -72,15 +73,18 @@ export default async function HomePage() {
       )}
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-primary py-20 lg:py-32">
-        {/* Track lane lines decoration */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-[10%] w-px h-full bg-primary-foreground" />
-          <div className="absolute top-0 left-[30%] w-px h-full bg-primary-foreground" />
-          <div className="absolute top-0 left-[50%] w-px h-full bg-primary-foreground" />
-          <div className="absolute top-0 left-[70%] w-px h-full bg-primary-foreground" />
-          <div className="absolute top-0 left-[90%] w-px h-full bg-primary-foreground" />
-        </div>
+      <section className="relative overflow-hidden bg-neutral-950 py-20 lg:py-32">
+        <Image
+          src="/images/latc-track-hero.png"
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover"
+          priority
+          aria-hidden="true"
+        />
+        <div className="absolute inset-0 bg-neutral-950/70" />
+        <div className="absolute inset-0 bg-gradient-to-b from-neutral-950/30 via-neutral-950/35 to-neutral-950/80" />
         <div className="container relative mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
             {/* LATC Logo */}
@@ -327,6 +331,35 @@ export default async function HomePage() {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Service Area Section */}
+      <section className="py-16 lg:py-20 bg-muted">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto max-w-4xl text-center">
+            <div className="mb-4 inline-flex items-center rounded-full bg-primary/10 px-4 py-1.5">
+              <MapPin className="mr-2 h-4 w-4 text-primary" />
+              <span className="text-sm font-medium text-primary">Lansing Youth Track Club</span>
+            </div>
+            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl text-balance">
+              Serving Families Across Lansing and Mid-Michigan
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-muted-foreground text-pretty">
+              Lansing Area Track Club welcomes youth athletes from Lansing, East Lansing, Okemos,
+              Holt, Waverly, Delta Township, Haslett, and nearby Mid-Michigan communities.
+            </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-2">
+              {siteConfig.areaServed.map((area) => (
+                <span
+                  key={area}
+                  className="rounded-full border border-border bg-card px-3 py-1 text-sm font-medium text-foreground"
+                >
+                  {area}
+                </span>
+              ))}
             </div>
           </div>
         </div>
