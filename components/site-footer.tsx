@@ -113,10 +113,10 @@ export function SiteFooter() {
               <li className="flex items-center gap-3">
                 <Mail className="h-5 w-5 text-accent shrink-0" />
                 <a 
-                  href="mailto:info@lansingatc.com"
+                  href="mailto:lansingareatrackclub@yahoo.com"
                   className="text-sm text-primary-foreground/80 hover:text-accent transition-colors"
                 >
-                  info@lansingatc.com
+                  lansingareatrackclub@yahoo.com
                 </a>
               </li>
             </ul>
