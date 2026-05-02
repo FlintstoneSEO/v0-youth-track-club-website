@@ -79,49 +79,52 @@ export default async function HomePage() {
           alt=""
           fill
           sizes="100vw"
-          className="object-cover"
+          className="animate-hero-photo object-cover"
           priority
           aria-hidden="true"
         />
         <div className="absolute inset-0 bg-neutral-950/70" />
         <div className="absolute inset-0 bg-gradient-to-b from-neutral-950/30 via-neutral-950/35 to-neutral-950/80" />
+        <div className="absolute inset-x-0 top-0 h-px overflow-hidden bg-primary-foreground/10">
+          <div className="animate-track-sheen h-full w-1/2 bg-gradient-to-r from-transparent via-accent to-transparent" />
+        </div>
         <div className="container relative mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
             {/* LATC Logo */}
-            <div className="mb-6 flex justify-center">
+            <div className="animate-rise mb-6 flex justify-center">
               <Image
                 src="/images/latc-logo.jpg"
                 alt="Lansing Area Track Club - Two runners in lime green and royal blue"
                 width={180}
                 height={180}
-                className="h-auto w-40 sm:w-44 lg:w-48 rounded-xl bg-white p-2 shadow-lg"
+                className="h-auto w-40 rounded-xl bg-white p-2 shadow-2xl shadow-black/40 ring-1 ring-white/25 sm:w-44 lg:w-48"
                 priority
               />
             </div>
-            <div className="mb-4 inline-flex items-center rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-1.5">
+            <div className="animate-rise-delay-1 mb-4 inline-flex items-center rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-1.5 shadow-lg shadow-black/20 backdrop-blur">
               <span className="text-sm font-medium text-primary-foreground">
                 Serving Lansing &amp; Mid-Michigan Since 2015
               </span>
             </div>
-            <h1 className="text-balance text-4xl font-bold tracking-tight text-primary-foreground sm:text-5xl lg:text-6xl">
+            <h1 className="animate-rise-delay-2 text-balance text-4xl font-bold tracking-tight text-primary-foreground sm:text-5xl lg:text-6xl">
               Lansing Area Track Club
             </h1>
-            <p className="mt-4 text-xl font-medium text-accent">
+            <p className="animate-rise-delay-2 mt-4 text-xl font-medium text-accent">
               Youth Track &amp; Running in Lansing, Michigan
             </p>
-            <p className="mt-6 text-lg leading-relaxed text-primary-foreground/80 text-pretty">
+            <p className="animate-rise-delay-3 mt-6 text-lg leading-relaxed text-primary-foreground/80 text-pretty">
               Helping young athletes grow on and off the track. Led by Coach Ramon Brunson, 
               we provide a positive environment where kids can build speed, endurance, confidence, 
               discipline, and a love for running.
             </p>
-            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 w-full sm:w-auto">
+            <div className="animate-rise-delay-3 mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <Button asChild size="lg" className="motion-button w-full bg-accent text-accent-foreground hover:bg-accent/90 sm:w-auto">
                 <Link href="/contact">
                   Join the Track Club
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <ArrowRight className="motion-icon ml-2 h-4 w-4" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="border-primary-foreground/20 bg-primary-foreground text-primary hover:bg-primary-foreground/90 hover:text-primary w-full sm:w-auto">
+              <Button asChild variant="outline" size="lg" className="motion-button w-full border-primary-foreground/20 bg-primary-foreground text-primary hover:bg-primary-foreground/90 hover:text-primary sm:w-auto">
                 <Link href="/practices">View Practices &amp; Meets</Link>
               </Button>
             </div>
@@ -136,9 +139,9 @@ export default async function HomePage() {
       </section>
 
       {/* About Preview */}
-      <section className="py-16 lg:py-20">
+      <section className="section-glow py-16 lg:py-20">
         <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-3xl text-center">
+          <div className="animate-rise relative mx-auto max-w-3xl text-center">
             <p className="text-lg leading-relaxed text-muted-foreground text-pretty">
               Founded from a simple idea of getting kids together to train, Lansing Area Track Club 
               has grown into a community-centered youth track program serving families across Lansing 
@@ -146,10 +149,10 @@ export default async function HomePage() {
               young athletes learn proper technique, build character, and discover what they are 
               capable of through hard work and consistency.
             </p>
-            <Button asChild variant="link" className="mt-4">
+            <Button asChild variant="link" className="motion-button mt-4">
               <Link href="/about">
                 Learn more about our story
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <ArrowRight className="motion-icon ml-2 h-4 w-4" />
               </Link>
             </Button>
           </div>
@@ -157,9 +160,9 @@ export default async function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 lg:py-24 bg-muted">
+      <section className="section-glow bg-muted py-16 lg:py-24">
         <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-2xl text-center mb-12">
+          <div className="animate-rise relative mx-auto mb-12 max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl text-balance">
               Why Lansing Area Track Club?
             </h2>
@@ -168,11 +171,16 @@ export default async function HomePage() {
               developing young athletes in Lansing, Michigan and the surrounding Mid-Michigan area.
             </p>
           </div>
-          <div className="grid gap-8 md:grid-cols-3">
-            {features.map((feature) => (
-              <Card key={feature.title} className="border-0 shadow-lg bg-card">
+          <div className="relative grid gap-8 md:grid-cols-3">
+            {features.map((feature, index) => (
+              <Card
+                key={feature.title}
+                className={`motion-card border-0 bg-card shadow-lg ${
+                  index === 0 ? "animate-rise" : index === 1 ? "animate-rise-delay-1" : "animate-rise-delay-2"
+                }`}
+              >
                 <CardHeader>
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-accent/10">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-accent/10 ring-1 ring-accent/15">
                     <feature.icon className="h-6 w-6 text-accent" />
                   </div>
                   <CardTitle className="text-xl">{feature.title}</CardTitle>
@@ -191,7 +199,7 @@ export default async function HomePage() {
       {/* Upcoming Events Section */}
       <section className="py-16 lg:py-24">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-12">
+          <div className="animate-rise mb-12 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <div>
               <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
                 Upcoming Events
@@ -200,10 +208,10 @@ export default async function HomePage() {
                 Stay updated with our latest practices, meets, and community events.
               </p>
             </div>
-            <Button asChild variant="outline">
+            <Button asChild variant="outline" className="motion-button">
               <Link href="/events">
                 View All Events
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <ArrowRight className="motion-icon ml-2 h-4 w-4" />
               </Link>
             </Button>
           </div>
@@ -213,8 +221,13 @@ export default async function HomePage() {
             </div>
           ) : (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {upcomingEvents.map((event) => (
-                <Card key={event.id} className="overflow-hidden">
+              {upcomingEvents.map((event, index) => (
+                <Card
+                  key={event.id}
+                  className={`motion-card overflow-hidden ${
+                    index === 0 ? "animate-rise" : index === 1 ? "animate-rise-delay-1" : "animate-rise-delay-2"
+                  }`}
+                >
                   <div className={`h-2 ${
                     event.event_type === "practice" 
                       ? "bg-primary" 
@@ -263,11 +276,14 @@ export default async function HomePage() {
       </section>
 
       {/* Run Tha City 517 Section - Red/Black/White theme */}
-      <section className="py-16 lg:py-24 bg-neutral-900">
+      <section className="relative overflow-hidden bg-neutral-900 py-16 lg:py-24">
+        <div className="absolute inset-x-0 top-0 h-px overflow-hidden bg-white/10">
+          <div className="animate-track-sheen h-full w-1/2 bg-gradient-to-r from-transparent via-red-500 to-transparent" />
+        </div>
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-4xl">
             <div className="grid gap-8 lg:grid-cols-2 items-center">
-              <div>
+              <div className="animate-rise">
                 <div className="mb-4 inline-flex items-center rounded-full border border-red-500/30 bg-red-600/10 px-4 py-1.5">
                   <span className="text-sm font-medium text-red-400">Community Running Group</span>
                 </div>
@@ -284,21 +300,21 @@ export default async function HomePage() {
                   Started in June 2022, growing from a local conversation about Black runners in Lansing.
                 </p>
                 <div className="mt-8">
-                  <Button asChild size="lg" className="bg-red-600 text-white hover:bg-red-700">
+                  <Button asChild size="lg" className="motion-button bg-red-600 text-white hover:bg-red-700">
                     <Link href="/run-tha-city-517">
                       Join the Movement
-                      <ArrowRight className="ml-2 h-4 w-4" />
+                      <ArrowRight className="motion-icon ml-2 h-4 w-4" />
                     </Link>
                   </Button>
                 </div>
               </div>
-              <div className="relative flex items-center justify-center">
+              <div className="animate-rise-delay-1 relative flex items-center justify-center">
                 <Image
                   src="/images/run-tha-city-517-logo.png"
                   alt="Run Tha City 517 - Lansing community running group"
                   width={400}
                   height={250}
-                  className="w-full max-w-sm h-auto"
+                  className="h-auto w-full max-w-sm drop-shadow-2xl"
                 />
               </div>
             </div>
@@ -307,9 +323,9 @@ export default async function HomePage() {
       </section>
 
       {/* Juneteenth 5K Section */}
-      <section className="py-16 lg:py-24 bg-success/10">
+      <section className="section-glow bg-success/10 py-16 lg:py-24">
         <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-4xl text-center">
+          <div className="animate-rise relative mx-auto max-w-4xl text-center">
             <div className="mb-4 inline-flex items-center rounded-full bg-success/20 px-4 py-1.5">
               <span className="text-sm font-medium text-success">Community Race</span>
             </div>
@@ -325,10 +341,10 @@ export default async function HomePage() {
               Proceeds and donations support our vision for a year-round indoor practice facility for youth athletes.
             </p>
             <div className="mt-8">
-              <Button asChild size="lg" className="bg-success text-success-foreground hover:bg-success/90">
+              <Button asChild size="lg" className="motion-button bg-success text-success-foreground hover:bg-success/90">
                 <Link href="/juneteenth-5k">
                   Learn More About the 5K
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <ArrowRight className="motion-icon ml-2 h-4 w-4" />
                 </Link>
               </Button>
             </div>
@@ -337,9 +353,9 @@ export default async function HomePage() {
       </section>
 
       {/* Service Area Section */}
-      <section className="py-16 lg:py-20 bg-muted">
+      <section className="bg-muted py-16 lg:py-20">
         <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-4xl text-center">
+          <div className="animate-rise mx-auto max-w-4xl text-center">
             <div className="mb-4 inline-flex items-center rounded-full bg-primary/10 px-4 py-1.5">
               <MapPin className="mr-2 h-4 w-4 text-primary" />
               <span className="text-sm font-medium text-primary">Lansing Youth Track Club</span>
@@ -355,7 +371,7 @@ export default async function HomePage() {
               {siteConfig.areaServed.map((area) => (
                 <span
                   key={area}
-                  className="rounded-full border border-border bg-card px-3 py-1 text-sm font-medium text-foreground"
+                  className="motion-card rounded-full border border-border bg-card px-3 py-1 text-sm font-medium text-foreground shadow-sm"
                 >
                   {area}
                 </span>
@@ -366,9 +382,9 @@ export default async function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 lg:py-24">
+      <section className="section-glow py-16 lg:py-24">
         <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-3xl text-center">
+          <div className="animate-rise relative mx-auto max-w-3xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl text-balance">
               Ready to Start Your Track Journey?
             </h2>
@@ -377,13 +393,13 @@ export default async function HomePage() {
               track and field at Lansing Area Track Club.
             </p>
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 w-full sm:w-auto">
+              <Button asChild size="lg" className="motion-button w-full bg-accent text-accent-foreground hover:bg-accent/90 sm:w-auto">
                 <Link href="/contact">
                   Register Your Athlete
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <ArrowRight className="motion-icon ml-2 h-4 w-4" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
+              <Button asChild variant="outline" size="lg" className="motion-button w-full sm:w-auto">
                 <Link href="/faq">Have Questions?</Link>
               </Button>
             </div>

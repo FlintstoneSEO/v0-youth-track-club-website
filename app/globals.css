@@ -149,3 +149,132 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .animate-hero-photo {
+    animation: hero-photo-drift 18s ease-in-out infinite alternate;
+  }
+
+  .animate-rise {
+    animation: rise-in 700ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  .animate-rise-delay-1 {
+    animation: rise-in 700ms cubic-bezier(0.2, 0.8, 0.2, 1) 120ms both;
+  }
+
+  .animate-rise-delay-2 {
+    animation: rise-in 700ms cubic-bezier(0.2, 0.8, 0.2, 1) 240ms both;
+  }
+
+  .animate-rise-delay-3 {
+    animation: rise-in 700ms cubic-bezier(0.2, 0.8, 0.2, 1) 360ms both;
+  }
+
+  .animate-track-sheen {
+    animation: track-sheen 5s linear infinite;
+  }
+
+  .motion-card {
+    transform: translateZ(0);
+    transition:
+      transform 240ms ease,
+      box-shadow 240ms ease,
+      border-color 240ms ease,
+      background-color 240ms ease;
+  }
+
+  .motion-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 55px color-mix(in oklch, var(--primary) 18%, transparent);
+  }
+
+  .motion-button {
+    transition:
+      transform 180ms ease,
+      box-shadow 180ms ease,
+      background-color 180ms ease,
+      color 180ms ease;
+  }
+
+  .motion-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px color-mix(in oklch, var(--primary) 16%, transparent);
+  }
+
+  .motion-button:active {
+    transform: translateY(0);
+  }
+
+  .motion-icon {
+    transition: transform 220ms ease;
+  }
+
+  .motion-card:hover .motion-icon,
+  .motion-button:hover .motion-icon {
+    transform: translateX(3px);
+  }
+
+  .section-glow {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section-glow::before {
+    content: "";
+    position: absolute;
+    inset: -30% 10% auto;
+    height: 260px;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 28% 50%, color-mix(in oklch, var(--accent) 28%, transparent), transparent 38%),
+      radial-gradient(circle at 70% 35%, color-mix(in oklch, var(--primary) 18%, transparent), transparent 42%);
+    filter: blur(36px);
+    opacity: 0.55;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(22px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes hero-photo-drift {
+  from {
+    transform: scale(1.02) translate3d(-0.8%, -0.6%, 0);
+  }
+  to {
+    transform: scale(1.08) translate3d(0.8%, 0.6%, 0);
+  }
+}
+
+@keyframes track-sheen {
+  from {
+    transform: translateX(-120%);
+  }
+  to {
+    transform: translateX(120%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .motion-card:hover,
+  .motion-button:hover {
+    transform: none;
+  }
+}
