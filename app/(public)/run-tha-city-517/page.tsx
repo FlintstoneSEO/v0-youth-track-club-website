@@ -5,6 +5,7 @@ import { ArrowRight, Calendar, Clock, MapPin, Users, Heart, Sparkles } from "luc
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { createClient } from "@/lib/supabase/server"
+import type { SupabaseRow } from "@/lib/supabase/rows"
 
 export const metadata: Metadata = {
   title: "Run Tha City 517 | Lansing Community Running Group",
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
   ],
 }
 
-async function getUpcomingRuns() {
+async function getUpcomingRuns(): Promise<SupabaseRow[]> {
   const supabase = await createClient()
   const { data } = await supabase
     .from('run_tha_city_events')

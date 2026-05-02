@@ -4,6 +4,7 @@ import { ArrowRight, Calendar, Clock, ExternalLink, MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { createClient } from "@/lib/supabase/server"
+import type { SupabaseRow } from "@/lib/supabase/rows"
 
 export const metadata: Metadata = {
   title: "Meets, Events & Local Races | Lansing Area Track Club",
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
   ],
 }
 
-async function getEvents() {
+async function getEvents(): Promise<SupabaseRow[]> {
   const supabase = await createClient()
   const { data } = await supabase
     .from('events')

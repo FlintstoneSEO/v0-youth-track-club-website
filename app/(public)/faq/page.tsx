@@ -9,13 +9,14 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { createClient } from "@/lib/supabase/server"
+import type { SupabaseRow } from "@/lib/supabase/rows"
 
 export const metadata: Metadata = {
   title: "FAQ",
   description: "Frequently asked questions about Lansing Area Track Club programs, registration, and more.",
 }
 
-async function getFaqs() {
+async function getFaqs(): Promise<SupabaseRow[]> {
   const supabase = await createClient()
   const { data } = await supabase
     .from('faqs')
@@ -88,7 +89,7 @@ export default async function FAQPage() {
                     {categoryLabels[category] || category}
                   </h2>
                   <Accordion type="single" collapsible className="space-y-4">
-                    {faqsByCategory[category].map((faq) => (
+                    {faqsByCategory[category].map((faq: SupabaseRow) => (
                       <AccordionItem
                         key={faq.id}
                         value={faq.id}

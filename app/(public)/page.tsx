@@ -4,6 +4,7 @@ import { ArrowRight, Calendar, MapPin, Users, Heart, Target } from "lucide-react
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { createClient } from "@/lib/supabase/server"
+import type { SupabaseRow } from "@/lib/supabase/rows"
 
 const features = [
   {
@@ -23,7 +24,7 @@ const features = [
   },
 ]
 
-async function getUpcomingEvents() {
+async function getUpcomingEvents(): Promise<SupabaseRow[]> {
   const supabase = await createClient()
   const { data } = await supabase
     .from('events')
@@ -36,7 +37,7 @@ async function getUpcomingEvents() {
   return data || []
 }
 
-async function getLatestAnnouncement() {
+async function getLatestAnnouncement(): Promise<SupabaseRow | null> {
   const supabase = await createClient()
   const { data } = await supabase
     .from('announcements')
@@ -116,7 +117,7 @@ export default async function HomePage() {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 w-full sm:w-auto">
+              <Button asChild variant="outline" size="lg" className="border-primary-foreground/20 bg-primary-foreground text-primary hover:bg-primary-foreground/90 hover:text-primary w-full sm:w-auto">
                 <Link href="/practices">View Practices &amp; Meets</Link>
               </Button>
             </div>

@@ -2,13 +2,14 @@ import type { Metadata } from "next"
 import { Calendar, Megaphone } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { createClient } from "@/lib/supabase/server"
+import type { SupabaseRow } from "@/lib/supabase/rows"
 
 export const metadata: Metadata = {
   title: "Announcements",
   description: "Stay updated with the latest news and announcements from Lansing Area Track Club.",
 }
 
-async function getAnnouncements() {
+async function getAnnouncements(): Promise<SupabaseRow[]> {
   const supabase = await createClient()
   const { data } = await supabase
     .from('announcements')

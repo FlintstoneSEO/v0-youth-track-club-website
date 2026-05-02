@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import type { SupabaseRow } from '@/lib/supabase/rows'
 import { 
   Megaphone, 
   Calendar, 
@@ -44,7 +45,7 @@ async function getStats() {
   }
 }
 
-async function getRecentSignups() {
+async function getRecentSignups(): Promise<SupabaseRow[]> {
   const supabase = await createClient()
   const { data } = await supabase
     .from('athlete_signups')
@@ -55,7 +56,7 @@ async function getRecentSignups() {
   return data || []
 }
 
-async function getUpcomingEvents() {
+async function getUpcomingEvents(): Promise<SupabaseRow[]> {
   const supabase = await createClient()
   const { data } = await supabase
     .from('events')
