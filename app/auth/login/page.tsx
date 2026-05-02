@@ -27,13 +27,18 @@ function LoginForm() {
     setError(null)
 
     const supabase = createClient()
+    const normalizedEmail = email.trim().toLowerCase()
     const { data, error } = await supabase.auth.signInWithPassword({
-      email,
+      email: normalizedEmail,
       password,
     })
 
     if (error) {
-      setError(error.message)
+      setError(
+        error.message === 'Invalid login credentials'
+          ? 'Invalid login credentials. Check that this email exists in the connected Supabase project and that the password is correct.'
+          : error.message,
+      )
       setIsLoading(false)
       return
     }
@@ -51,7 +56,7 @@ function LoginForm() {
     setMessage(null)
 
     const supabase = createClient()
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    const { error } = await supabase.auth.resetPasswordForEmail(email.trim().toLowerCase(), {
       redirectTo: `${window.location.origin}/auth/reset-password`,
     })
 
