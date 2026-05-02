@@ -27,7 +27,7 @@ function LoginForm() {
     setError(null)
 
     const supabase = createClient()
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     })
@@ -38,8 +38,10 @@ function LoginForm() {
       return
     }
 
-    router.push(redirect)
-    router.refresh()
+    if (data.session) {
+      // Use window.location for hard navigation to ensure cookies are set
+      window.location.href = redirect
+    }
   }
 
   const handlePasswordReset = async (e: React.FormEvent) => {
