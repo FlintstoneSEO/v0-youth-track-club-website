@@ -11,7 +11,8 @@ import {
   Users, 
   Trophy,
   Building2,
-  Activity
+  Activity,
+  Clock
 } from 'lucide-react'
 import type { User } from '@supabase/supabase-js'
 
@@ -26,6 +27,7 @@ interface AdminSidebarProps {
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { name: 'Announcements', href: '/admin/announcements', icon: Megaphone },
+  { name: 'Practice Schedules', href: '/admin/practices', icon: Clock },
   { name: 'Events', href: '/admin/events', icon: Calendar },
   { name: 'FAQs', href: '/admin/faqs', icon: HelpCircle },
   { name: 'Athlete Signups', href: '/admin/signups', icon: Users },

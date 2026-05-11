@@ -3,41 +3,22 @@ import Link from "next/link"
 import { ArrowRight, Calendar, Clock, MapPin, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { createClient } from "@/lib/supabase/server"
+import { PracticeScheduleDisplay } from "@/components/practice-schedule-display"
+import { TrackMeetsSection } from "@/components/track-meets-section"
 
 export const metadata: Metadata = {
-  title: "Practice Schedule | Lansing Area Track Club",
-  description: "View Lansing Area Track Club practice information, training updates, locations, and important details for youth athletes and parents in Lansing, Michigan.",
+  title: "Practice Schedule & Track Meets | Lansing Area Track Club",
+  description: "View Lansing Area Track Club practice schedule, locations, and 2026 track meet schedule. Practices Monday-Wednesday 6-7:30pm at Alfreda Schmidt Community Center Track.",
   keywords: [
     "youth track practice Lansing",
     "track practice schedule Lansing MI",
     "kids running practice Lansing",
-    "youth athletics training Mid-Michigan"
+    "youth athletics training Mid-Michigan",
+    "LATC track meets",
+    "Lansing track meet schedule 2026"
   ],
 }
-
-const practiceSchedule = [
-  {
-    ageGroup: "Youth (Ages 6-12)",
-    days: "Tuesday & Thursday",
-    time: "5:00 PM - 6:30 PM",
-    location: "Sexton High School Track",
-    focus: "Fundamentals, fun activities, basic technique",
-  },
-  {
-    ageGroup: "Middle School (Ages 12-14)",
-    days: "Monday, Wednesday & Friday",
-    time: "4:30 PM - 6:00 PM",
-    location: "Eastern High School Track",
-    focus: "Progressive training, event introduction, conditioning",
-  },
-  {
-    ageGroup: "High School Prep (Ages 14-18)",
-    days: "Monday - Friday",
-    time: "4:00 PM - 6:00 PM",
-    location: "Everett High School Track",
-    focus: "Advanced training, event specialization, competition prep",
-  },
-]
 
 const whatToBring = [
   "Comfortable athletic clothing",
@@ -66,7 +47,14 @@ const expectations = [
   },
 ]
 
-export default function PracticesPage() {
+export default async function PracticesPage() {
+  const supabase = await createClient()
+  const { data: schedules } = await supabase
+    .from('practice_schedules')
+    .select('*')
+    .eq('is_active', true)
+    .order('display_order', { ascending: true })
+
   return (
     <>
       {/* Hero Section */}
@@ -74,61 +62,49 @@ export default function PracticesPage() {
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
             <h1 className="text-4xl font-bold tracking-tight text-primary-foreground sm:text-5xl text-balance">
-              Practice Schedule
+              Practice Schedule & Track Meets
             </h1>
             <p className="mt-6 text-lg leading-relaxed text-primary-foreground/80 text-pretty">
-              Find your practice times, locations, and learn what to expect at 
-              Lansing Area Track Club training sessions.
+              Find your practice times, locations, and view our complete 
+              track meet schedule for the 2026 season.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Schedule Section */}
+      {/* Practice Schedule Section */}
       <section className="py-16 lg:py-24">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-2xl text-center mb-12">
             <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              Weekly Schedule
+              Weekly Practice Schedule
             </h2>
             <p className="mt-4 text-lg text-muted-foreground text-pretty">
-              Practice schedules by age group. All schedules are subject to change 
-              based on weather and facility availability.
+              Join us for practice sessions throughout the week. All schedules are subject 
+              to change based on weather and facility availability.
             </p>
           </div>
-          <div className="grid gap-6 lg:grid-cols-3">
-            {practiceSchedule.map((schedule) => (
-              <Card key={schedule.ageGroup} className="overflow-hidden">
-                <div className="h-2 bg-primary" />
-                <CardHeader>
-                  <CardTitle className="text-xl">{schedule.ageGroup}</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <Calendar className="h-5 w-5 text-primary shrink-0" />
-                    <span className="text-sm text-muted-foreground">{schedule.days}</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Clock className="h-5 w-5 text-primary shrink-0" />
-                    <span className="text-sm text-muted-foreground">{schedule.time}</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <MapPin className="h-5 w-5 text-primary shrink-0" />
-                    <span className="text-sm text-muted-foreground">{schedule.location}</span>
-                  </div>
-                  <div className="pt-4 border-t border-border">
-                    <p className="text-sm font-medium text-foreground mb-1">Focus:</p>
-                    <p className="text-sm text-muted-foreground">{schedule.focus}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          
+          {schedules && schedules.length > 0 ? (
+            <PracticeScheduleDisplay schedules={schedules} />
+          ) : (
+            <Card className="max-w-2xl mx-auto">
+              <CardContent className="py-12 text-center">
+                <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                <p className="text-muted-foreground">
+                  Practice schedule coming soon. Please check back later!
+                </p>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </section>
 
+      {/* Track Meet Schedule Section */}
+      <TrackMeetsSection athleticNetUrl="https://www.athletic.net/team/91933/track-and-field-outdoor/2026" />
+
       {/* What to Bring */}
-      <section className="bg-muted py-16 lg:py-24">
+      <section className="py-16 lg:py-24">
         <div className="container mx-auto px-4">
           <div className="grid gap-12 lg:grid-cols-2">
             <div>
@@ -175,7 +151,7 @@ export default function PracticesPage() {
       </section>
 
       {/* Typical Practice Structure */}
-      <section className="py-16 lg:py-24">
+      <section className="bg-muted py-16 lg:py-24">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl">
             <div className="text-center mb-12">
@@ -232,10 +208,10 @@ export default function PracticesPage() {
               Register your athlete today and join us at our next practice!
             </p>
             <div className="mt-10">
-              <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
+              <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 motion-button">
                 <Link href="/contact">
                   Register Now
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <ArrowRight className="ml-2 h-4 w-4 motion-icon" />
                 </Link>
               </Button>
             </div>
