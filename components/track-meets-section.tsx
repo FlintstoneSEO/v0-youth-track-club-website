@@ -1,17 +1,49 @@
-import { Calendar, ExternalLink, Trophy, MapPin, Clock } from 'lucide-react'
+'use client'
+
+import { useMemo, useState } from 'react'
+import { Calendar, ExternalLink, Trophy, MapPin, Search } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+
+interface MeetPreviewItem {
+  name: string
+  date: string
+  location: string
+  level: 'Local' | 'Regional' | 'State'
+}
 
 interface TrackMeetsSectionProps {
   athleticNetUrl?: string
 }
 
-export function TrackMeetsSection({ 
-  athleticNetUrl = 'https://www.athletic.net/team/91933/track-and-field-outdoor/2026' 
+const previewMeets: MeetPreviewItem[] = [
+  { name: 'MSU Spartan Invitational', date: 'April 11, 2026', location: 'East Lansing, MI', level: 'Regional' },
+  { name: 'Lansing Youth Open #1', date: 'April 25, 2026', location: 'Lansing, MI', level: 'Local' },
+  { name: 'Capital City Track Challenge', date: 'May 2, 2026', location: 'Lansing, MI', level: 'Regional' },
+  { name: 'Mid-Michigan Development Meet', date: 'May 16, 2026', location: 'Okemos, MI', level: 'Local' },
+  { name: 'MITCA Youth Championships', date: 'June 6, 2026', location: 'Grand Rapids, MI', level: 'State' },
+]
+
+export function TrackMeetsSection({
+  athleticNetUrl = 'https://www.athletic.net/team/91933/track-and-field-outdoor/2026',
 }: TrackMeetsSectionProps) {
-  // Extract team ID from URL for embed
+  const [search, setSearch] = useState('')
+  const [level, setLevel] = useState<'All' | MeetPreviewItem['level']>('All')
+
+  const filteredMeets = useMemo(() => {
+    return previewMeets.filter((meet) => {
+      const matchesSearch =
+        meet.name.toLowerCase().includes(search.toLowerCase()) ||
+        meet.location.toLowerCase().includes(search.toLowerCase()) ||
+        meet.date.toLowerCase().includes(search.toLowerCase())
+      const matchesLevel = level === 'All' || meet.level === level
+      return matchesSearch && matchesLevel
+    })
+  }, [search, level])
+
   const teamId = athleticNetUrl.match(/team\/(\d+)/)?.[1] || '91933'
-  
+
   return (
     <section className="py-16 lg:py-24 bg-muted">
       <div className="container mx-auto px-4">
@@ -20,49 +52,71 @@ export function TrackMeetsSection({
             <Trophy className="w-4 h-4" />
             Official Meet Schedule
           </div>
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            2026 Track Meet Schedule
-          </h2>
+          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">2026 Track Meet Schedule</h2>
           <p className="mt-4 text-lg text-muted-foreground text-pretty">
-            View our complete track meet schedule for the 2026 season. Results, 
-            entry lists, and meet details are all available through Athletic.net.
+            Meet information is powered by Athletic.net. Use the quick search below to preview likely events,
+            then open the official schedule for the latest entries, times, and results.
           </p>
         </div>
 
-        {/* Athletic.net Embed Card */}
-        <Card className="max-w-5xl mx-auto overflow-hidden">
-          <CardHeader className="bg-primary/5 border-b border-border">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <CardTitle className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
-                  <Calendar className="w-5 h-5 text-primary-foreground" />
+        <div className="grid gap-6 lg:grid-cols-3 max-w-5xl mx-auto mb-8">
+          <Card className="lg:col-span-2">
+            <CardHeader>
+              <CardTitle className="text-lg">Quick Meet Finder</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-col md:flex-row gap-3 mb-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search by meet, city, or date..." className="pl-9" />
                 </div>
-                <div>
-                  <span className="text-lg">Lansing Area Track Club</span>
-                  <p className="text-sm font-normal text-muted-foreground">
-                    2026 Outdoor Track & Field
-                  </p>
+                <div className="flex gap-2">
+                  {(['All', 'Local', 'Regional', 'State'] as const).map((option) => (
+                    <Button key={option} variant={level === option ? 'default' : 'outline'} size="sm" onClick={() => setLevel(option)}>
+                      {option}
+                    </Button>
+                  ))}
                 </div>
-              </CardTitle>
-              <Button asChild className="motion-button">
-                <a 
-                  href={athleticNetUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <ExternalLink className="w-4 h-4 mr-2" />
-                  View on Athletic.net
+              </div>
+              <div className="space-y-2">
+                {filteredMeets.map((meet) => (
+                  <div key={`${meet.name}-${meet.date}`} className="rounded-lg border border-border p-3 bg-background">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                      <p className="font-medium text-foreground">{meet.name}</p>
+                      <span className="text-xs rounded-full bg-primary/10 text-primary px-2 py-1 w-fit">{meet.level}</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground mt-1">{meet.date}</p>
+                    <p className="text-sm text-muted-foreground">{meet.location}</p>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Official Source</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                For final meet entries, start lists, updates, and result timing, use our official Athletic.net team page.
+              </p>
+              <Button asChild className="w-full motion-button">
+                <a href={athleticNetUrl} target="_blank" rel="noopener noreferrer">
+                  <ExternalLink className="w-4 h-4 mr-2" /> Open Official Schedule
                 </a>
               </Button>
-            </div>
-          </CardHeader>
+            </CardContent>
+          </Card>
+        </div>
+
+        <Card className="max-w-5xl mx-auto overflow-hidden">
           <CardContent className="p-0">
-            {/* Athletic.net iframe embed */}
-            <div className="relative w-full" style={{ minHeight: '600px' }}>
+            <div className="relative w-full" style={{ minHeight: '640px' }}>
               <iframe
-                src={`https://www.athletic.net/team/${teamId}/track-and-field-outdoor/2026/schedule`}
+                src={`https://www.athletic.net/team/${teamId}/track-and-field-outdoor/2026`}
                 width="100%"
-                height="600"
+                height="640"
                 style={{ border: 0 }}
                 title="LATC Track Meet Schedule"
                 loading="lazy"
@@ -71,60 +125,6 @@ export function TrackMeetsSection({
             </div>
           </CardContent>
         </Card>
-
-        {/* Quick Info Cards */}
-        <div className="grid gap-6 md:grid-cols-3 max-w-4xl mx-auto mt-12">
-          <Card className="text-center motion-card">
-            <CardContent className="pt-6">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                <Calendar className="w-6 h-6 text-primary" />
-              </div>
-              <h3 className="font-semibold text-foreground mb-2">Season Schedule</h3>
-              <p className="text-sm text-muted-foreground">
-                View all upcoming meets with dates, times, and registration deadlines
-              </p>
-            </CardContent>
-          </Card>
-          <Card className="text-center motion-card">
-            <CardContent className="pt-6">
-              <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mx-auto mb-4">
-                <Trophy className="w-6 h-6 text-accent" />
-              </div>
-              <h3 className="font-semibold text-foreground mb-2">Live Results</h3>
-              <p className="text-sm text-muted-foreground">
-                Track athlete performances and results in real-time during meets
-              </p>
-            </CardContent>
-          </Card>
-          <Card className="text-center motion-card">
-            <CardContent className="pt-6">
-              <div className="w-12 h-12 rounded-xl bg-success/10 flex items-center justify-center mx-auto mb-4">
-                <MapPin className="w-6 h-6 text-success" />
-              </div>
-              <h3 className="font-semibold text-foreground mb-2">Meet Locations</h3>
-              <p className="text-sm text-muted-foreground">
-                Find directions and venue information for each competition
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Note about Athletic.net */}
-        <div className="max-w-2xl mx-auto mt-12 text-center">
-          <p className="text-sm text-muted-foreground">
-            Schedule data is provided by{' '}
-            <a 
-              href="https://www.athletic.net" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-primary hover:underline"
-            >
-              Athletic.net
-            </a>
-            . For the most up-to-date information, registration details, and 
-            live results, please visit the official schedule page.
-          </p>
-        </div>
       </div>
     </section>
   )
