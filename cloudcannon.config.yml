@@ -1,0 +1,41 @@
+paths:
+  static: ''
+  uploads: uploads
+timezone: America/Detroit
+markdown:
+  engine: commonmark
+  options: {}
+collections_config:
+  pages:
+    path: ''
+    icon: wysiwyg
+  app:
+    path: app
+    icon: api
+  astro_latc_cloudcannon_announcements:
+    path: astro-latc-cloudcannon/src/content/announcements
+    icon: stress_management
+  astro_latc_cloudcannon_data:
+    path: astro-latc-cloudcannon/src/data
+    icon: partly_cloudy_day
+  astro_latc_cloudcannon_dist:
+    path: astro-latc-cloudcannon/dist
+    icon: add_location_alt
+  astro_latc_cloudcannon_events:
+    path: astro-latc-cloudcannon/src/content/events
+    icon: stylus_fountain_pen
+  astro_latc_cloudcannon_faqs:
+    path: astro-latc-cloudcannon/src/content/faqs
+    icon: add_location_alt
+  astro_latc_cloudcannon_migration:
+    path: astro-latc-cloudcannon/migration
+    icon: assistant_navigation
+  astro_latc_cloudcannon_run_tha_city_events:
+    path: astro-latc-cloudcannon/src/content/run-tha-city-events
+    icon: production_quantity_limits
+  astro_latc_cloudcannon_sponsors:
+    path: astro-latc-cloudcannon/src/content/sponsors
+    icon: globe_location_pin
+  components:
+    path: components
+    icon: comment
