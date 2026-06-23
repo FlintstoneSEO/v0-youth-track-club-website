@@ -1,0 +1,5 @@
+{
+  "ssg": "nextjs",
+  "mode": "hosted",
+  "build": {}
+}
