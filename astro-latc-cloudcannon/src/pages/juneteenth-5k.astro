@@ -1,0 +1,26 @@
+---
+import { ArrowRight } from "lucide-astro";
+import { Calendar } from "lucide-astro";
+import { Heart } from "lucide-astro";
+import { MapPin } from "lucide-astro";
+import { Trophy } from "lucide-astro";
+import { Users } from "lucide-astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHero from "@/components/PageHero.astro";
+
+const highlights = [
+  { icon: Users, title: "Everyone Welcome", description: "Runners, walkers, families, teams, strollers, and wheelchair participants are all welcome." },
+  { icon: MapPin, title: "Benjamin Davis Park", description: "The race starts and finishes at Benjamin Davis Park in Lansing, Michigan." },
+  { icon: Heart, title: "Support Youth Athletics", description: "Proceeds and donations support LATC's planned indoor practice facility." },
+  { icon: Trophy, title: "Community Celebration", description: "More than a race, this is a celebration of community, history, and movement." },
+];
+---
+
+<BaseLayout title="Lansing Juneteenth 5K Run/Walk/Roll" description="Join Lansing Area Track Club and Run Tha City 517 for the Lansing Juneteenth 5K Run/Walk/Roll.">
+  <PageHero tone="success" eyebrow="Annual Community Event" title="Lansing Juneteenth 5K" subtitle="Run/Walk/Roll" />
+  <section class="py-16 lg:py-24"><div class="container max-w-3xl"><h2 class="text-center text-3xl font-bold sm:text-4xl">About the Lansing Juneteenth 5K</h2><div class="mt-8 space-y-6 text-lg leading-relaxed text-muted-foreground"><p>The Lansing Juneteenth 5K Run/Walk/Roll brings the community together for a meaningful 3.1-mile event at Benjamin Davis Park.</p><p>Hosted in partnership with Lansing Area Track Club and Run Tha City 517, this event celebrates freedom, fitness, and community unity.</p><p>Proceeds and donations support LATC&apos;s vision for a year-round indoor practice facility.</p></div></div></section>
+  <section class="bg-muted py-16 lg:py-24"><div class="container"><div class="mx-auto mb-12 max-w-2xl text-center"><h2 class="text-3xl font-bold sm:text-4xl">Event Highlights</h2><p class="mt-4 text-lg text-muted-foreground">What makes the Lansing Juneteenth 5K special.</p></div><div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">{highlights.map((highlight) => { const Icon = highlight.icon; return <article class="card p-6 text-center"><Icon class="mx-auto mb-4 h-10 w-10 text-success" /><h3 class="text-lg font-bold">{highlight.title}</h3><p class="mt-3 text-sm leading-relaxed text-muted-foreground">{highlight.description}</p></article>; })}</div></div></section>
+  <section class="py-16 lg:py-24"><div class="container grid gap-12 lg:grid-cols-2"><div><h2 class="text-3xl font-bold sm:text-4xl">Event Details</h2><div class="mt-8 space-y-6"><p class="flex gap-4"><MapPin class="h-6 w-6 text-success" /><span><strong>Location</strong><br />Benjamin Davis Park, Lansing, Michigan</span></p><p class="flex gap-4"><Calendar class="h-6 w-6 text-success" /><span><strong>When</strong><br />Annually in June. Check announcements for this year&apos;s date.</span></p><p class="flex gap-4"><Users class="h-6 w-6 text-success" /><span><strong>Who Can Participate</strong><br />Runners, walkers, families, teams, strollers, wheelchair participants. Everyone welcome.</span></p></div></div><article class="card bg-success/5 p-6"><h2 class="text-xl font-bold">Supporting Youth Athletics</h2><p class="mt-4 text-muted-foreground">Your participation directly supports LATC&apos;s mission and contributes to a planned indoor practice facility, year-round training, and safe youth development programs.</p></article></div></section>
+  <section class="bg-primary py-16 text-center text-primary-foreground lg:py-24"><div class="container max-w-3xl"><h2 class="text-3xl font-bold sm:text-4xl">Hosted In Partnership</h2><p class="mt-4 text-lg text-primary-foreground/80">The Lansing Juneteenth 5K is brought to you by two organizations committed to building community through running.</p><div class="mt-12 grid gap-8 sm:grid-cols-2"><article class="card border-white/20 bg-white/10 p-6"><h3 class="text-xl font-bold">Lansing Area Track Club</h3><p class="mt-3 text-sm text-primary-foreground/70">Youth track and field program serving Lansing and Mid-Michigan since 2015.</p></article><article class="card border-white/20 bg-white/10 p-6"><h3 class="text-xl font-bold">Run Tha City 517</h3><p class="mt-3 text-sm text-primary-foreground/70">Lansing community running group bringing people together through movement and representation.</p></article></div></div></section>
+  <section class="py-16 text-center lg:py-24"><div class="container max-w-3xl"><h2 class="text-3xl font-bold sm:text-4xl">Join Us at the Finish Line</h2><p class="mt-4 text-lg text-muted-foreground">Whether you run, walk, or roll, you are part of the community. Register interest, volunteer, or become a sponsor.</p><div class="mt-10 flex flex-col justify-center gap-4 sm:flex-row"><a href="/contact/" class="btn bg-success text-success-foreground">Get Involved <ArrowRight class="h-4 w-4" /></a><a href="/announcements/" class="btn btn-outline">Check Announcements</a></div></div></section>
+</BaseLayout>

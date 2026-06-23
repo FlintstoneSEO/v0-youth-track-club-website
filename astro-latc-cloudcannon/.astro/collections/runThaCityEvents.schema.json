@@ -1,0 +1,86 @@
+{
+  "$ref": "#/definitions/runThaCityEvents",
+  "definitions": {
+    "runThaCityEvents": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string",
+          "default": ""
+        },
+        "event_date": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "string",
+              "format": "date"
+            },
+            {
+              "type": "integer",
+              "format": "unix-time"
+            }
+          ]
+        },
+        "start_time": {
+          "type": "string",
+          "default": ""
+        },
+        "location": {
+          "type": "string",
+          "default": ""
+        },
+        "meeting_point": {
+          "type": "string",
+          "default": ""
+        },
+        "distance": {
+          "type": "string",
+          "default": ""
+        },
+        "difficulty": {
+          "type": "string",
+          "enum": [
+            "all_levels",
+            "beginner",
+            "intermediate",
+            "advanced"
+          ],
+          "default": "all_levels"
+        },
+        "event_type": {
+          "type": "string",
+          "enum": [
+            "group_run",
+            "race",
+            "community",
+            "other"
+          ],
+          "default": "group_run"
+        },
+        "is_featured": {
+          "type": "boolean",
+          "default": false
+        },
+        "is_published": {
+          "type": "boolean",
+          "default": true
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "event_date"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

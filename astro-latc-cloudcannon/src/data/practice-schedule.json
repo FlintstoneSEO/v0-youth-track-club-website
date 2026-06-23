@@ -1,0 +1,45 @@
+{
+  "schedule": [
+    {
+      "age_group": "Youth (Ages 6-12)",
+      "days": "Tuesday & Thursday",
+      "time": "5:00 PM - 6:30 PM",
+      "location": "Sexton High School Track",
+      "focus": "Fundamentals, fun activities, basic technique"
+    },
+    {
+      "age_group": "Middle School (Ages 12-14)",
+      "days": "Monday, Wednesday & Friday",
+      "time": "4:30 PM - 6:00 PM",
+      "location": "Eastern High School Track",
+      "focus": "Progressive training, event introduction, conditioning"
+    },
+    {
+      "age_group": "High School Prep (Ages 14-18)",
+      "days": "Monday - Friday",
+      "time": "4:00 PM - 6:00 PM",
+      "location": "Everett High School Track",
+      "focus": "Advanced training, event specialization, competition prep"
+    }
+  ],
+  "what_to_bring": [
+    "Comfortable athletic clothing",
+    "Running shoes (spikes optional for advanced athletes)",
+    "Water bottle",
+    "Sunscreen (for outdoor practices)",
+    "Positive attitude!"
+  ],
+  "expectations": [
+    { "title": "Arrive On Time", "description": "Please arrive 10-15 minutes early to check in and warm up with the group." },
+    { "title": "Be Prepared", "description": "Bring water, appropriate shoes, and dress for the weather conditions." },
+    { "title": "Stay Positive", "description": "Encourage teammates and maintain a growth mindset during training." },
+    { "title": "Listen to Coaches", "description": "Follow instructions and ask questions when you need clarification." }
+  ],
+  "timeline": [
+    { "time": "0-15 min", "activity": "Check-in & Dynamic Warm-up", "description": "Athletes check in with coaches and begin group warm-up exercises." },
+    { "time": "15-30 min", "activity": "Drills & Technique Work", "description": "Focused drills to improve running form, starts, and event-specific skills." },
+    { "time": "30-60 min", "activity": "Main Workout", "description": "Event-specific training, conditioning, or speed work based on the day's plan." },
+    { "time": "60-75 min", "activity": "Cool Down & Stretch", "description": "Light jogging and stretching to aid recovery." },
+    { "time": "75-90 min", "activity": "Team Talk & Dismissal", "description": "Coaches share announcements and athletes are dismissed to parents." }
+  ]
+}

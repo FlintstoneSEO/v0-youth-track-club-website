@@ -1,0 +1,13 @@
+{
+  "items": [
+    { "label": "Home", "url": "/" },
+    { "label": "About", "url": "/about/" },
+    { "label": "Practices", "url": "/practices/" },
+    { "label": "Events", "url": "/events/" },
+    { "label": "Announcements", "url": "/announcements/" },
+    { "label": "FAQ", "url": "/faq/" },
+    { "label": "Run Tha City 517", "url": "/run-tha-city-517/" },
+    { "label": "Juneteenth 5K", "url": "/juneteenth-5k/" },
+    { "label": "Contact", "url": "/contact/" }
+  ]
+}

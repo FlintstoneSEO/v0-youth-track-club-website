@@ -1,0 +1,44 @@
+---
+import { getCollection } from "astro:content";
+import { ArrowRight } from "lucide-astro";
+import { Calendar } from "lucide-astro";
+import { Clock } from "lucide-astro";
+import { Heart } from "lucide-astro";
+import { MapPin } from "lucide-astro";
+import { Sparkles } from "lucide-astro";
+import { Users } from "lucide-astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const runs = (await getCollection("runThaCityEvents"))
+  .filter((run) => run.data.is_published && run.data.event_date >= new Date())
+  .sort((a, b) => a.data.event_date.getTime() - b.data.event_date.getTime());
+const features = [
+  { icon: Users, title: "Representation Matters", description: "Started from a conversation about Black runners in Lansing, we believe representation and visibility inspire participation." },
+  { icon: Heart, title: "Community First", description: "More than running, we are building connections, accountability, and a supportive community." },
+  { icon: Sparkles, title: "All Levels Welcome", description: "Whether you are training for your first 5K or you are a seasoned runner, you belong here." },
+];
+---
+
+<BaseLayout title="Run Tha City 517" description="Run Tha City 517 is a Lansing running group rooted in community, representation, fitness, and welcoming runners of all levels.">
+  <section class="relative overflow-hidden bg-neutral-950 py-20 text-white lg:py-32">
+    <img src="/images/run-tha-city-lansing-hero.png" alt="" class="absolute inset-0 h-full w-full object-cover" />
+    <div class="absolute inset-0 bg-neutral-950/70"></div>
+    <div class="container relative text-center">
+      <img src="/images/run-tha-city-517-logo.png" alt="Run Tha City 517" class="mx-auto mb-8 w-full max-w-sm" />
+      <p class="mx-auto max-w-3xl text-lg leading-relaxed text-white/80">A Lansing running group created to bring people together through movement, representation, and community. We welcome runners of all levels.</p>
+      <p class="mt-4 text-sm text-white/60">Founded June 2022 by Ramon Brunson</p>
+      <a href="/contact/" class="btn mt-10 bg-red-600 text-white hover:bg-red-700">Join the Movement <ArrowRight class="h-4 w-4" /></a>
+    </div>
+  </section>
+  <section class="bg-white py-16 text-center lg:py-24"><div class="container max-w-3xl"><h2 class="text-3xl font-bold text-neutral-900 sm:text-4xl">Our Story</h2><p class="mt-6 text-lg leading-relaxed text-neutral-600">Run Tha City 517 started in June 2022 and grew from a local conversation about Black runners in Lansing into a regular running community.</p><p class="mt-4 text-lg leading-relaxed text-neutral-600">We believe running is for everyone, representation matters, and people moving together can strengthen the whole community.</p></div></section>
+  <section class="bg-neutral-100 py-16 lg:py-24"><div class="container"><h2 class="mb-12 text-center text-3xl font-bold text-neutral-900 sm:text-4xl">What We&apos;re About</h2><div class="grid gap-8 md:grid-cols-3">{features.map((feature) => { const Icon = feature.icon; return <article class="card p-6 text-center"><Icon class="mx-auto mb-4 h-10 w-10 text-red-600" /><h3 class="text-xl font-bold text-neutral-900">{feature.title}</h3><p class="mt-3 leading-relaxed text-neutral-600">{feature.description}</p></article>; })}</div></div></section>
+  <section class="bg-white py-16 lg:py-24">
+    <div class="container">
+      <div class="mx-auto mb-12 max-w-2xl text-center"><h2 class="text-3xl font-bold text-neutral-900 sm:text-4xl">Upcoming Group Runs</h2><p class="mt-4 text-lg text-neutral-600">Join us for community runs. No membership required, just show up and run.</p></div>
+      {runs.length === 0 ? <div class="rounded-xl bg-neutral-100 p-12 text-center text-neutral-600">No upcoming runs scheduled at this time.</div> : <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{runs.map((run) => <article class="card overflow-hidden"><div class="h-2 bg-red-600"></div><div class="p-6"><div class="flex gap-2"><span class="rounded-full bg-red-600/10 px-2.5 py-1 text-xs font-semibold text-red-600">{run.data.distance}</span><span class="rounded-full bg-neutral-900/10 px-2.5 py-1 text-xs font-semibold capitalize text-neutral-900">{run.data.difficulty.replace("_", " ")}</span></div><h3 class="mt-3 text-xl font-bold text-neutral-900">{run.data.title}</h3><p class="mt-2 text-neutral-600">{run.data.description}</p><div class="mt-4 space-y-2 text-sm text-neutral-600"><p class="flex items-center gap-2"><Calendar class="h-4 w-4 text-red-600" />{run.data.event_date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>{run.data.start_time && <p class="flex items-center gap-2"><Clock class="h-4 w-4 text-red-600" />{run.data.start_time}</p>}<p class="flex items-center gap-2"><MapPin class="h-4 w-4 text-red-600" />{run.data.meeting_point || run.data.location}</p></div></div></article>)}</div>}
+    </div>
+  </section>
+  <section class="bg-neutral-100 py-16 text-center lg:py-24"><div class="container max-w-3xl"><h2 class="text-3xl font-bold text-neutral-900 sm:text-4xl">How to Join a Run</h2><p class="mt-4 text-lg text-neutral-600">No membership, no fees, no barriers, just show up and run with us.</p><div class="mt-12 grid gap-8 md:grid-cols-3">{["Check the Schedule", "Show Up", "Run Together"].map((title, index) => <div><span class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-600 text-xl font-bold text-white">{index + 1}</span><h3 class="font-bold text-neutral-900">{title}</h3><p class="mt-2 text-sm text-neutral-600">Join the group, meet new people, and move through Lansing at your own pace.</p></div>)}</div></div></section>
+  <section class="bg-neutral-900 py-16 text-white lg:py-24"><div class="container grid gap-8 lg:grid-cols-2"><article class="card border-white/20 bg-white/10 p-6"><h2 class="text-xl font-bold">Connected to LATC</h2><p class="mt-3 text-white/70">Run Tha City 517 and Lansing Area Track Club share a mission: building a stronger, healthier Lansing community through running and athletics.</p><a href="/about/" class="btn mt-4 text-red-300">Learn about LATC <ArrowRight class="h-4 w-4" /></a></article><article class="card border-green-500/30 bg-green-600/20 p-6"><h2 class="text-xl font-bold">Lansing Juneteenth 5K</h2><p class="mt-3 text-white/70">Run Tha City 517 helps host the annual Lansing Juneteenth 5K Run/Walk/Roll at Benjamin Davis Park.</p><a href="/juneteenth-5k/" class="btn mt-4 text-green-300">Learn about the 5K <ArrowRight class="h-4 w-4" /></a></article></div></section>
+  <section class="bg-white py-16 text-center lg:py-24"><div class="container max-w-3xl"><h2 class="text-3xl font-bold text-neutral-900 sm:text-4xl">Stay Connected</h2><p class="mt-4 text-lg text-neutral-600">Follow for run announcements, route updates, and community highlights. Tag #RunThaCity517 to share your runs.</p><div class="mt-10 flex flex-col justify-center gap-4 sm:flex-row"><a href="/contact/" class="btn bg-red-600 text-white">Get Connected <ArrowRight class="h-4 w-4" /></a><a href="/announcements/" class="btn btn-outline">View Announcements</a></div></div></section>
+</BaseLayout>

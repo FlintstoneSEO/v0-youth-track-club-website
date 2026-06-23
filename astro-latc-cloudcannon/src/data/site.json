@@ -1,0 +1,21 @@
+{
+  "name": "Lansing Area Track Club",
+  "short_name": "LATC",
+  "founder": "Ramon Brunson",
+  "email": "info@lansingatc.com",
+  "city": "Lansing",
+  "region": "MI",
+  "country": "US",
+  "site_url": "https://www.lansingatc.com",
+  "description": "Lansing Area Track Club helps youth athletes in Lansing, Michigan build speed, endurance, confidence, and discipline through track, running, practices, meets, and community events.",
+  "area_served": [
+    "Lansing",
+    "East Lansing",
+    "Okemos",
+    "Holt",
+    "Waverly",
+    "Delta Township",
+    "Haslett",
+    "Mid-Michigan"
+  ]
+}

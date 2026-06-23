@@ -1,0 +1,51 @@
+---
+import { Menu } from "lucide-astro";
+import { X } from "lucide-astro";
+import navigation from "@/data/navigation.json";
+---
+
+<header class="sticky top-0 z-50 border-b border-border/60 bg-background/95 backdrop-blur">
+  <nav class="container flex h-16 items-center justify-between">
+    <a href="/" class="flex items-center gap-2 font-bold">
+      <img src="/images/latc-logo.jpg" alt="Lansing Area Track Club" class="h-12 w-auto rounded-md bg-white p-1" />
+      <span class="hidden leading-tight sm:block">
+        <span class="block text-sm">Lansing Area</span>
+        <span class="block text-sm text-primary">Track Club</span>
+      </span>
+    </a>
+
+    <div class="hidden items-center gap-1 lg:flex" data-editable="array" data-prop="@data[navigation].items">
+      {navigation.items.map((item) => (
+        <a
+          href={item.url}
+          data-editable="array-item"
+          class="rounded-md px-3 py-2 text-sm font-semibold text-muted-foreground transition hover:bg-muted hover:text-foreground"
+        >
+          <span data-editable="text" data-prop="label">{item.label}</span>
+        </a>
+      ))}
+    </div>
+
+    <div class="hidden items-center gap-3 lg:flex">
+      <a href="/contact/" class="btn btn-accent">Join Now</a>
+    </div>
+
+    <details class="group lg:hidden">
+      <summary class="list-none rounded-md p-2 text-foreground">
+        <Menu class="h-6 w-6 group-open:hidden" />
+        <X class="hidden h-6 w-6 group-open:block" />
+        <span class="sr-only">Toggle menu</span>
+      </summary>
+      <div class="absolute left-0 right-0 top-16 border-b border-border bg-background p-4 shadow-lg">
+        <div class="container grid gap-1">
+          {navigation.items.map((item) => (
+            <a href={item.url} class="rounded-md px-3 py-2 font-semibold text-muted-foreground hover:bg-muted hover:text-foreground">
+              {item.label}
+            </a>
+          ))}
+          <a href="/contact/" class="btn btn-accent mt-3">Join Now</a>
+        </div>
+      </div>
+    </details>
+  </nav>
+</header>

@@ -1,0 +1,78 @@
+---
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import site from "@/data/site.json";
+import "@/styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const title = Astro.props.title
+  ? `${Astro.props.title} | ${site.name}`
+  : "Lansing Area Track Club | Youth Track & Running Club in Lansing, MI";
+const description = Astro.props.description ?? site.description;
+const canonical = new URL(Astro.url.pathname, site.site_url).toString();
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "SportsOrganization",
+    "@id": `${site.site_url}/#organization`,
+    name: site.name,
+    alternateName: site.short_name,
+    url: site.site_url,
+    logo: `${site.site_url}/images/latc-logo.jpg`,
+    image: `${site.site_url}/images/latc-logo.jpg`,
+    email: site.email,
+    founder: { "@type": "Person", name: site.founder },
+    foundingDate: "2015",
+    sport: ["Track and field", "Running"],
+    description: site.description,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: site.city,
+      addressRegion: site.region,
+      addressCountry: site.country,
+    },
+    areaServed: site.area_served.map((name) => ({ "@type": "AdministrativeArea", name })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${site.site_url}/#website`,
+    url: site.site_url,
+    name: site.name,
+    description: site.description,
+    publisher: { "@id": `${site.site_url}/#organization` },
+    inLanguage: "en-US",
+  },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/images/latc-logo.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>{title}</title>
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <div class="flex min-h-screen flex-col">
+      <Header />
+      <main class="flex-1">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+  </body>
+</html>

@@ -1,0 +1,31 @@
+---
+import { ArrowRight } from "lucide-astro";
+import { Calendar } from "lucide-astro";
+import { Clock } from "lucide-astro";
+import { MapPin } from "lucide-astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHero from "@/components/PageHero.astro";
+import practice from "@/data/practice-schedule.json";
+---
+
+<BaseLayout title="Practice Schedule" description="View Lansing Area Track Club practice information, training updates, locations, and details for youth athletes and parents.">
+  <PageHero title="Practice Schedule" subtitle="Find your practice times, locations, and learn what to expect at Lansing Area Track Club training sessions." />
+  <section class="py-16 lg:py-24">
+    <div class="container">
+      <div class="mx-auto mb-12 max-w-2xl text-center"><h2 class="text-3xl font-bold sm:text-4xl">Weekly Schedule</h2><p class="mt-4 text-lg text-muted-foreground">Practice schedules by age group. All schedules are subject to change based on weather and facility availability.</p></div>
+      <div class="grid gap-6 lg:grid-cols-3" data-editable="array" data-prop="@data[practice-schedule].schedule">
+        {practice.schedule.map((item) => <article class="card overflow-hidden" data-editable="array-item"><div class="h-2 bg-primary"></div><div class="p-6"><h3 class="text-xl font-bold" data-editable="text" data-prop="age_group">{item.age_group}</h3><div class="mt-4 space-y-3 text-sm text-muted-foreground"><p class="flex items-center gap-3"><Calendar class="h-5 w-5 text-primary" />{item.days}</p><p class="flex items-center gap-3"><Clock class="h-5 w-5 text-primary" />{item.time}</p><p class="flex items-center gap-3"><MapPin class="h-5 w-5 text-primary" />{item.location}</p></div><p class="mt-4 border-t border-border pt-4 text-sm text-muted-foreground"><strong class="text-foreground">Focus:</strong> {item.focus}</p></div></article>)}
+      </div>
+    </div>
+  </section>
+  <section class="bg-muted py-16 lg:py-24">
+    <div class="container grid gap-12 lg:grid-cols-2">
+      <div><h2 class="text-3xl font-bold sm:text-4xl">What to Bring</h2><p class="mt-4 text-lg text-muted-foreground">Make sure your athlete is prepared for every practice session.</p><ul class="mt-8 space-y-3">{practice.what_to_bring.map((item) => <li class="flex items-center gap-3"><span class="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10"><span class="h-2 w-2 rounded-full bg-primary"></span></span>{item}</li>)}</ul></div>
+      <div><h2 class="text-3xl font-bold sm:text-4xl">What to Expect</h2><p class="mt-4 text-lg text-muted-foreground">Here is what a typical practice looks like at LATC.</p><div class="mt-8 space-y-4">{practice.expectations.map((item, index) => <div class="flex gap-4"><span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-sm font-bold text-accent-foreground">{index + 1}</span><div><h3 class="font-bold">{item.title}</h3><p class="mt-1 text-sm text-muted-foreground">{item.description}</p></div></div>)}</div></div>
+    </div>
+  </section>
+  <section class="py-16 lg:py-24">
+    <div class="container max-w-3xl"><div class="mb-12 text-center"><h2 class="text-3xl font-bold sm:text-4xl">Typical Practice Structure</h2><p class="mt-4 text-lg text-muted-foreground">Every practice follows a structured format to maximize development and safety.</p></div><div class="space-y-4">{practice.timeline.map((item, index) => <article class="card p-5"><p class="text-sm font-bold text-accent">{index + 1}. {item.time}</p><h3 class="mt-1 text-lg font-bold">{item.activity}</h3><p class="mt-2 text-muted-foreground">{item.description}</p></article>)}</div></div>
+  </section>
+  <section class="bg-primary py-16 text-center text-primary-foreground lg:py-24"><div class="container max-w-3xl"><h2 class="text-3xl font-bold sm:text-4xl">Ready to Get Started?</h2><p class="mt-4 text-lg text-primary-foreground/80">Register your athlete today and join us at our next practice.</p><a href="/contact/" class="btn btn-accent mt-10">Register Now <ArrowRight class="h-4 w-4" /></a></div></section>
+</BaseLayout>

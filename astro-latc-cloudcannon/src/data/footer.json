@@ -1,0 +1,30 @@
+{
+  "description": "Helping youth athletes in Lansing, Michigan build speed, endurance, confidence, and discipline through track, running, and community since 2015.",
+  "service_area_note": "Serving Lansing, East Lansing, Okemos, Holt, Waverly, Delta Township and surrounding Mid-Michigan communities.",
+  "columns": [
+    {
+      "heading": "Quick Links",
+      "links": [
+        { "label": "About Us", "url": "/about/" },
+        { "label": "Practices", "url": "/practices/" },
+        { "label": "Events", "url": "/events/" },
+        { "label": "FAQ", "url": "/faq/" }
+      ]
+    },
+    {
+      "heading": "Programs",
+      "links": [
+        { "label": "Youth Track", "url": "/about/#programs" },
+        { "label": "Run Tha City 517", "url": "/run-tha-city-517/" },
+        { "label": "Juneteenth 5K", "url": "/juneteenth-5k/" },
+        { "label": "Sponsors", "url": "/about/#sponsors" }
+      ]
+    }
+  ],
+  "social_links": [
+    { "label": "Facebook", "url": "https://facebook.com" },
+    { "label": "Instagram", "url": "https://instagram.com" }
+  ],
+  "credit": "Designed by Flintstone SEO",
+  "credit_url": "https://flintstoneseo.com"
+}
