@@ -6,6 +6,25 @@ paths:
   uploads: public/images
 
 collections_config:
+  pages:
+    path: src/pages
+    name: Pages
+    singular_name: Page
+    icon: wysiwyg
+    url: "/[slug]/"
+    glob:
+      - index.astro
+      - about.astro
+      - announcements.astro
+      - contact.astro
+      - events.astro
+      - faq.astro
+      - juneteenth-5k.astro
+      - practices.astro
+      - run-tha-city-517.astro
+    _enabled_editors:
+      - visual
+    disable_add: true
   events:
     path: src/content/events
     name: Events
@@ -72,6 +91,7 @@ data_config:
 collection_groups:
   - heading: Site Content
     collections:
+      - pages
       - events
       - announcements
       - faqs
