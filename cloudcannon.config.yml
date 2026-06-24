@@ -1,41 +1,264 @@
+version: 3.0.0
+timezone: America/New_York
+
 paths:
-  static: ''
-  uploads: uploads
-timezone: America/Detroit
-markdown:
-  engine: commonmark
-  options: {}
+  static: public
+  uploads: public/images
+
 collections_config:
-  pages:
-    path: ''
-    icon: wysiwyg
-  app:
-    path: app
-    icon: api
-  astro_latc_cloudcannon_announcements:
-    path: astro-latc-cloudcannon/src/content/announcements
-    icon: stress_management
-  astro_latc_cloudcannon_data:
-    path: astro-latc-cloudcannon/src/data
-    icon: partly_cloudy_day
-  astro_latc_cloudcannon_dist:
-    path: astro-latc-cloudcannon/dist
-    icon: add_location_alt
-  astro_latc_cloudcannon_events:
-    path: astro-latc-cloudcannon/src/content/events
-    icon: stylus_fountain_pen
-  astro_latc_cloudcannon_faqs:
-    path: astro-latc-cloudcannon/src/content/faqs
-    icon: add_location_alt
-  astro_latc_cloudcannon_migration:
-    path: astro-latc-cloudcannon/migration
-    icon: assistant_navigation
-  astro_latc_cloudcannon_run_tha_city_events:
-    path: astro-latc-cloudcannon/src/content/run-tha-city-events
-    icon: production_quantity_limits
-  astro_latc_cloudcannon_sponsors:
-    path: astro-latc-cloudcannon/src/content/sponsors
-    icon: globe_location_pin
-  components:
-    path: components
-    icon: comment
+  events:
+    path: src/content/events
+    name: Events
+    singular_name: Event
+    icon: event
+    disable_url: true
+    _enabled_editors:
+      - data
+    add_options:
+      - name: Event
+  announcements:
+    path: src/content/announcements
+    name: Announcements
+    singular_name: Announcement
+    icon: campaign
+    disable_url: true
+    _enabled_editors:
+      - content
+      - data
+    add_options:
+      - name: Announcement
+  faqs:
+    path: src/content/faqs
+    name: FAQs
+    singular_name: FAQ
+    icon: help
+    disable_url: true
+    _enabled_editors:
+      - data
+    add_options:
+      - name: FAQ
+  runThaCityEvents:
+    path: src/content/run-tha-city-events
+    name: Run Tha City Events
+    singular_name: Run Tha City Event
+    icon: directions_run
+    disable_url: true
+    _enabled_editors:
+      - data
+    add_options:
+      - name: Run Tha City Event
+  sponsors:
+    path: src/content/sponsors
+    name: Sponsors
+    singular_name: Sponsor
+    icon: handshake
+    disable_url: true
+    _enabled_editors:
+      - content
+      - data
+    add_options:
+      - name: Sponsor
+
+data_config:
+  site:
+    path: src/data/site.json
+  navigation:
+    path: src/data/navigation.json
+  footer:
+    path: src/data/footer.json
+  practice-schedule:
+    path: src/data/practice-schedule.json
+
+collection_groups:
+  - heading: Site Content
+    collections:
+      - events
+      - announcements
+      - faqs
+      - runThaCityEvents
+      - sponsors
+  - heading: Settings
+    collections:
+      - site
+      - navigation
+      - footer
+      - practice-schedule
+
+_select_data:
+  event_types:
+    - meet
+    - practice
+    - community
+    - fundraiser
+    - other
+  announcement_priorities:
+    - urgent
+    - high
+    - normal
+    - low
+  faq_categories:
+    - general
+    - registration
+    - practices
+    - meets
+    - equipment
+    - other
+  run_difficulties:
+    - all_levels
+    - beginner
+    - intermediate
+    - advanced
+  sponsor_levels:
+    - partner
+    - gold
+    - silver
+    - bronze
+    - community
+
+_structures:
+  links:
+    values:
+      - label: Link
+        value:
+          label: New Link
+          url: /
+  navigation_items:
+    values:
+      - label: Navigation Item
+        value:
+          label: New Page
+          url: /
+  footer_columns:
+    values:
+      - label: Footer Column
+        value:
+          heading: Column
+          links:
+            - label: Link
+              url: /
+  practice_items:
+    values:
+      - label: Practice Schedule
+        value:
+          age_group: Age Group
+          days: Practice Days
+          time: Practice Time
+          location: Practice Location
+          focus: Training focus
+
+_inputs:
+  title:
+    type: text
+  description:
+    type: textarea
+  event_date:
+    type: date
+  start_time:
+    type: text
+  location:
+    type: text
+  event_type:
+    type: select
+    options:
+      values: _select_data.event_types
+  is_featured:
+    type: switch
+  is_published:
+    type: switch
+  registration_url:
+    type: url
+  priority:
+    type: select
+    options:
+      values: _select_data.announcement_priorities
+  published_at:
+    type: date
+  question:
+    type: textarea
+  answer:
+    type: textarea
+  category:
+    type: select
+    options:
+      values: _select_data.faq_categories
+  sort_order:
+    type: number
+  meeting_point:
+    type: text
+  distance:
+    type: text
+  difficulty:
+    type: select
+    options:
+      values: _select_data.run_difficulties
+  website:
+    type: url
+  logo:
+    type: image
+  level:
+    type: select
+    options:
+      values: _select_data.sponsor_levels
+
+file_config:
+  - glob: src/data/site.json
+    _inputs:
+      name:
+        type: text
+      short_name:
+        type: text
+      founder:
+        type: text
+      email:
+        type: email
+      site_url:
+        type: url
+      description:
+        type: textarea
+      area_served:
+        type: array
+  - glob: src/data/navigation.json
+    _inputs:
+      items:
+        type: array
+        options:
+          structures: _structures.navigation_items
+  - glob: src/data/footer.json
+    _inputs:
+      description:
+        type: textarea
+      service_area_note:
+        type: textarea
+      columns:
+        type: array
+        options:
+          structures: _structures.footer_columns
+      social_links:
+        type: array
+        options:
+          structures: _structures.links
+      credit_url:
+        type: url
+  - glob: src/data/practice-schedule.json
+    _inputs:
+      schedule:
+        type: array
+        options:
+          structures: _structures.practice_items
+      what_to_bring:
+        type: array
+      expectations:
+        type: array
+      timeline:
+        type: array
+
+_editables:
+  content:
+    bold: true
+    italic: true
+    link: true
+    bulletedlist: true
+    numberedlist: true
+    blockquote: true
+    format: p h2 h3 h4
+    removeformat: true
