@@ -7,8 +7,8 @@
     "nodeVersion": "22",
     "denoVersion": "2.7.1",
     "install_command": "npm install",
-    "build_command": "npx next build && npx next export",
-    "output_path": "out",
+    "build_command": "npm run build",
+    "output_path": "dist",
     "preserved_paths": ".next/"
   }
 }
