@@ -65,6 +65,13 @@ const jsonLd = [
     <meta name="twitter:card" content="summary_large_image" />
     <title>{title}</title>
     <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script>
+      if (window.inEditorMode) {
+        import("../cloudcannon/registerComponents").catch((error) => {
+          console.warn("Failed to load CloudCannon component registration:", error);
+        });
+      }
+    </script>
   </head>
   <body>
     <div class="flex min-h-screen flex-col">

@@ -27,7 +27,7 @@ import navigation from "@/data/navigation.json";
     </div>
 
     <div class="hidden items-center gap-3 lg:flex">
-      <a href="/contact/" class="btn btn-accent">Join Now</a>
+      <a href="/contact/" class="btn btn-accent"><span data-editable="source" data-path="src/components/Header.astro" data-key="header-join-label">Join Now</span></a>
     </div>
 
     <details class="group lg:hidden">
@@ -37,13 +37,15 @@ import navigation from "@/data/navigation.json";
         <span class="sr-only">Toggle menu</span>
       </summary>
       <div class="absolute left-0 right-0 top-16 border-b border-border bg-background p-4 shadow-lg">
-        <div class="container grid gap-1">
+        <div class="container grid gap-1" data-editable="array" data-prop="@data[navigation].items">
           {navigation.items.map((item) => (
-            <a href={item.url} class="rounded-md px-3 py-2 font-semibold text-muted-foreground hover:bg-muted hover:text-foreground">
-              {item.label}
+            <a href={item.url} data-editable="array-item" class="rounded-md px-3 py-2 font-semibold text-muted-foreground hover:bg-muted hover:text-foreground">
+              <span data-editable="text" data-prop="label">{item.label}</span>
             </a>
           ))}
-          <a href="/contact/" class="btn btn-accent mt-3">Join Now</a>
+        </div>
+        <div class="container mt-3">
+          <a href="/contact/" class="btn btn-accent"><span data-editable="source" data-path="src/components/Header.astro" data-key="mobile-header-join-label">Join Now</span></a>
         </div>
       </div>
     </details>

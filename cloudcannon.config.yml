@@ -1,4 +1,4 @@
-version: 3.0.0
+version: latest
 timezone: America/New_York
 
 paths:
@@ -7,24 +7,22 @@ paths:
 
 collections_config:
   pages:
-    path: src/pages
+    path: src/content/pages
     name: Pages
     singular_name: Page
     icon: wysiwyg
     url: "/[slug]/"
-    glob:
-      - index.astro
-      - about.astro
-      - announcements.astro
-      - contact.astro
-      - events.astro
-      - faq.astro
-      - juneteenth-5k.astro
-      - practices.astro
-      - run-tha-city-517.astro
     _enabled_editors:
       - visual
-    disable_add: true
+      - data
+    schemas:
+      page_builder:
+        path: .cloudcannon/schemas/page-builder.md
+        name: Page Builder
+    add_options:
+      - name: Page Builder
+        schema: page_builder
+        icon: dashboard
   events:
     path: src/content/events
     name: Events
@@ -32,6 +30,7 @@ collections_config:
     icon: event
     disable_url: true
     _enabled_editors:
+      - visual
       - data
     add_options:
       - name: Event
@@ -42,6 +41,7 @@ collections_config:
     icon: campaign
     disable_url: true
     _enabled_editors:
+      - visual
       - content
       - data
     add_options:
@@ -53,6 +53,7 @@ collections_config:
     icon: help
     disable_url: true
     _enabled_editors:
+      - visual
       - data
     add_options:
       - name: FAQ
@@ -63,6 +64,7 @@ collections_config:
     icon: directions_run
     disable_url: true
     _enabled_editors:
+      - visual
       - data
     add_options:
       - name: Run Tha City Event
@@ -73,6 +75,7 @@ collections_config:
     icon: handshake
     disable_url: true
     _enabled_editors:
+      - visual
       - content
       - data
     add_options:
@@ -165,6 +168,139 @@ _structures:
           time: Practice Time
           location: Practice Location
           focus: Training focus
+  actions:
+    values:
+      - label: Action
+        preview:
+          text:
+            - key: label
+            - Action
+          icon:
+            - ads_click
+        value:
+          label: Button
+          url: /
+          style: primary
+  cards:
+    values:
+      - label: Card
+        preview:
+          text:
+            - key: title
+            - Card
+          subtext:
+            - key: description
+          icon:
+            - dashboard
+        value:
+          title: Card title
+          description: Card description
+          icon: Target
+          meta: ""
+          links: []
+  content_blocks:
+    values:
+      - label: Hero
+        preview:
+          text:
+            - key: title
+            - Hero
+          icon:
+            - flag
+        value:
+          _type: hero
+          eyebrow: ""
+          title: Hero title
+          subtitle: ""
+          description: ""
+          image: ""
+          logo: ""
+          tone: primary
+          actions: []
+      - label: Text Section
+        preview:
+          text:
+            - key: title
+            - Text Section
+          icon:
+            - article
+        value:
+          _type: text_section
+          eyebrow: ""
+          title: Section title
+          content: "<p>Section content.</p>"
+          align: center
+          tone: default
+          actions: []
+      - label: Card Grid
+        preview:
+          text:
+            - key: title
+            - Card Grid
+          icon:
+            - dashboard
+        value:
+          _type: card_grid
+          eyebrow: ""
+          title: Card grid
+          subtitle: ""
+          tone: default
+          columns: "3"
+          cards: []
+      - label: Collection List
+        preview:
+          text:
+            - key: title
+            - Collection List
+          icon:
+            - dynamic_feed
+        value:
+          _type: collection_list
+          title: Collection List
+          subtitle: ""
+          collection: events
+          limit: 0
+          tone: default
+          empty_text: ""
+          actions: []
+      - label: Practice Schedule
+        preview:
+          text:
+            - key: title
+            - Practice Schedule
+          icon:
+            - event
+        value:
+          _type: practice_schedule
+          title: Weekly Schedule
+          subtitle: ""
+      - label: Area Served
+        preview:
+          text:
+            - key: title
+            - Area Served
+          icon:
+            - location_on
+        value:
+          _type: area_served
+          eyebrow: ""
+          title: Areas Served
+          subtitle: ""
+      - label: Contact Forms
+        preview:
+          text:
+            - key: contact_title
+            - Contact Forms
+          icon:
+            - contact_mail
+        value:
+          _type: contact_forms
+          registration_title: Athlete Registration
+          registration_description: ""
+          contact_title: Get in Touch
+          contact_description: ""
+          volunteer_title: Interested in Volunteering?
+          volunteer_description: ""
 
 _inputs:
   title:
@@ -219,6 +355,71 @@ _inputs:
     type: select
     options:
       values: _select_data.sponsor_levels
+  _schema:
+    hidden: true
+  content_blocks:
+    type: array
+    options:
+      structures: _structures.content_blocks
+  actions:
+    type: array
+    options:
+      structures: _structures.actions
+  cards:
+    type: array
+    options:
+      structures: _structures.cards
+  links:
+    type: array
+    options:
+      structures: _structures.links
+  content:
+    type: html
+    options:
+      allow_custom_markup: true
+  image:
+    type: image
+  tone:
+    type: select
+    options:
+      values:
+        - default
+        - muted
+        - primary
+        - dark
+        - success
+        - light
+  style:
+    type: select
+    options:
+      values:
+        - primary
+        - accent
+        - light
+        - outline
+        - success
+        - red
+  align:
+    type: select
+    options:
+      values:
+        - left
+        - center
+  columns:
+    type: select
+    options:
+      values:
+        - "2"
+        - "3"
+        - "4"
+  collection:
+    type: select
+    options:
+      values:
+        - events
+        - announcements
+        - faqs
+        - runThaCityEvents
 
 file_config:
   - glob: src/data/site.json
@@ -257,6 +458,8 @@ file_config:
         type: array
         options:
           structures: _structures.links
+      credit:
+        type: text
       credit_url:
         type: url
   - glob: src/data/practice-schedule.json
@@ -271,7 +474,6 @@ file_config:
         type: array
       timeline:
         type: array
-
 _editables:
   content:
     bold: true

@@ -1,0 +1,19 @@
+---
+import { getCollection } from "astro:content";
+import PageRenderer from "@/components/PageRenderer.astro";
+
+export async function getStaticPaths() {
+  const dedicatedRoutes = new Set(["index", "about", "announcements", "contact", "events", "faq", "juneteenth-5k", "practices", "run-tha-city-517"]);
+  const pages = await getCollection("pages");
+  return pages
+    .filter((page) => !dedicatedRoutes.has(page.id))
+    .map((page) => ({
+      params: { slug: page.id },
+      props: { page },
+    }));
+}
+
+const { page } = Astro.props;
+---
+
+<PageRenderer page={page} />

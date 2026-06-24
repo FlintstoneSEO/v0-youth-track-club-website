@@ -1,0 +1,122 @@
+---
+import { getCollection, render } from "astro:content";
+import { ArrowRight, Calendar, CheckCircle, Clock, Heart, Mail, MapPin, Send, Sparkles, Target, Trophy, Users } from "lucide-astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import practice from "@/data/practice-schedule.json";
+import site from "@/data/site.json";
+
+const { page } = Astro.props;
+const data = page.data;
+const blocks = data.content_blocks as any[];
+
+const iconMap: Record<string, any> = { Calendar, CheckCircle, Clock, Heart, Mail, MapPin, Send, Sparkles, Target, Trophy, Users };
+const buttonClass: Record<string, string> = {
+  primary: "btn btn-primary",
+  accent: "btn btn-accent",
+  light: "btn btn-light",
+  outline: "btn btn-outline",
+  success: "btn bg-success text-success-foreground",
+  red: "btn bg-red-600 text-white hover:bg-red-700",
+};
+const toneClass: Record<string, string> = {
+  default: "py-16 lg:py-24",
+  muted: "bg-muted py-16 lg:py-24",
+  primary: "bg-primary py-16 text-primary-foreground lg:py-24",
+  dark: "bg-neutral-950 py-16 text-white lg:py-24",
+  success: "bg-success/10 py-16 lg:py-24",
+  light: "bg-white py-16 lg:py-24",
+};
+const heroToneClass: Record<string, string> = {
+  primary: "bg-primary text-primary-foreground",
+  success: "bg-success text-success-foreground",
+  dark: "bg-neutral-950 text-white",
+  light: "bg-white text-foreground",
+};
+
+const collections = {
+  events: (await getCollection("events")).filter((item) => item.data.is_published && item.data.event_date >= new Date()).sort((a, b) => a.data.event_date.getTime() - b.data.event_date.getTime()),
+  announcements: (await getCollection("announcements")).filter((item) => item.data.is_published).sort((a, b) => b.data.published_at.getTime() - a.data.published_at.getTime()),
+  faqs: (await getCollection("faqs")).filter((item) => item.data.is_published).sort((a, b) => a.data.sort_order - b.data.sort_order),
+  runThaCityEvents: (await getCollection("runThaCityEvents")).filter((item) => item.data.is_published && item.data.event_date >= new Date()).sort((a, b) => a.data.event_date.getTime() - b.data.event_date.getTime()),
+};
+const collectionMap = collections as Record<string, any[]>;
+const renderedAnnouncements = await Promise.all(collections.announcements.map(async (item) => ({ item, Content: (await render(item)).Content })));
+---
+
+<BaseLayout title={data.title} description={data.description}>
+  <div data-editable="array" data-prop="content_blocks">
+    {blocks.map((block: any) => (
+      <section data-editable="array-item">
+        {block._type === "hero" && (
+          <div class={`relative overflow-hidden py-20 lg:py-32 ${heroToneClass[block.tone]}`}>
+            {block.image && <img src={block.image} alt="" class="absolute inset-0 h-full w-full object-cover" data-editable="image" data-prop-src="image" />}
+            {block.image && <div class="absolute inset-0 bg-neutral-950/70"></div>}
+            <div class="container relative text-center">
+              {block.logo && <img src={block.logo} alt={block.title} class="mx-auto mb-6 w-40 rounded-xl bg-white p-2 shadow-2xl ring-1 ring-white/25 sm:w-48" data-editable="image" data-prop-src="logo" />}
+              {block.eyebrow && <p class="mb-4 inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-semibold" data-editable="text" data-prop="eyebrow">{block.eyebrow}</p>}
+              <h1 class="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl" data-editable="text" data-prop="title">{block.title}</h1>
+              {block.subtitle && <p class="mt-4 text-xl font-semibold text-accent" data-editable="text" data-prop="subtitle">{block.subtitle}</p>}
+              {block.description && <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed opacity-80" data-editable="text" data-prop="description">{block.description}</p>}
+              {block.actions.length > 0 && <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row" data-editable="array" data-prop="actions">{block.actions.map((action: any) => <a href={action.url} class={`${buttonClass[action.style]} w-full sm:w-auto`} data-editable="array-item"><span data-editable="text" data-prop="label">{action.label}</span><ArrowRight class="h-4 w-4" /></a>)}</div>}
+            </div>
+          </div>
+        )}
+
+        {block._type === "text_section" && (
+          <div class={toneClass[block.tone]}>
+            <div class={`container ${block.align === "center" ? "text-center" : ""}`}>
+              <div class="mx-auto max-w-3xl">
+                {block.eyebrow && <p class="mb-4 inline-flex rounded-full bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary" data-editable="text" data-prop="eyebrow">{block.eyebrow}</p>}
+                {block.title && <h2 class="text-3xl font-bold tracking-tight sm:text-4xl" data-editable="text" data-prop="title">{block.title}</h2>}
+                {block.content && <div class="mt-6 space-y-4 text-lg leading-relaxed opacity-80" data-editable="text" data-type="block" data-prop="content" set:html={block.content} />}
+                {block.actions.length > 0 && <div class="mt-8 flex flex-col justify-center gap-4 sm:flex-row" data-editable="array" data-prop="actions">{block.actions.map((action: any) => <a href={action.url} class={buttonClass[action.style]} data-editable="array-item"><span data-editable="text" data-prop="label">{action.label}</span><ArrowRight class="h-4 w-4" /></a>)}</div>}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {block._type === "card_grid" && (
+          <div class={toneClass[block.tone]}>
+            <div class="container">
+              {(block.title || block.subtitle) && <div class="mx-auto mb-12 max-w-2xl text-center">{block.eyebrow && <p class="mb-4 inline-flex rounded-full bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary" data-editable="text" data-prop="eyebrow">{block.eyebrow}</p>}<h2 class="text-3xl font-bold tracking-tight sm:text-4xl" data-editable="text" data-prop="title">{block.title}</h2>{block.subtitle && <p class="mt-4 text-lg opacity-80" data-editable="text" data-prop="subtitle">{block.subtitle}</p>}</div>}
+              <div class={`grid gap-6 ${block.columns === "4" ? "sm:grid-cols-2 lg:grid-cols-4" : block.columns === "2" ? "lg:grid-cols-2" : "md:grid-cols-3"}`} data-editable="array" data-prop="cards">
+                {block.cards.map((card: any) => {
+                  const Icon = iconMap[card.icon] ?? Target;
+                  return <article class="card motion-card p-6 text-center" data-editable="array-item"><Icon class="mx-auto mb-4 h-10 w-10 text-accent" /><h3 class="text-xl font-bold" data-editable="text" data-prop="title">{card.title}</h3>{card.meta && <p class="mt-2 text-sm font-semibold text-accent" data-editable="text" data-prop="meta">{card.meta}</p>}<p class="mt-3 leading-relaxed opacity-80" data-editable="text" data-prop="description">{card.description}</p></article>;
+                })}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {block._type === "collection_list" && (
+          <div class={toneClass[block.tone]}>
+            <div class="container">
+              <div class="mx-auto mb-12 max-w-2xl text-center"><h2 class="text-3xl font-bold tracking-tight sm:text-4xl" data-editable="text" data-prop="title">{block.title}</h2>{block.subtitle && <p class="mt-4 text-lg opacity-80" data-editable="text" data-prop="subtitle">{block.subtitle}</p>}</div>
+              {block.collection === "announcements" ? (
+                <div class="mx-auto max-w-4xl space-y-6">{renderedAnnouncements.slice(0, block.limit || undefined).map(({ item, Content }) => <article class="card p-6"><span class="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold capitalize text-primary">{item.data.priority === "normal" ? "Update" : item.data.priority}</span><h3 class="mt-3 text-xl font-bold" data-editable="text" data-prop={`@file[/src/content/announcements/${item.id}.md].title`}>{item.data.title}</h3><div class="mt-4 leading-relaxed text-muted-foreground" data-editable="text" data-type="block" data-prop={`@file[/src/content/announcements/${item.id}.md].@content`}><Content /></div></article>)}</div>
+              ) : block.collection === "faqs" ? (
+                <div class="mx-auto max-w-3xl space-y-4">{collections.faqs.slice(0, block.limit || undefined).map((faq) => <details class="card p-5"><summary class="cursor-pointer font-bold" data-editable="text" data-prop={`@file[/src/content/faqs/${faq.id}.md].question`}>{faq.data.question}</summary><p class="mt-4 leading-relaxed text-muted-foreground" data-editable="text" data-prop={`@file[/src/content/faqs/${faq.id}.md].answer`}>{faq.data.answer}</p></details>)}</div>
+              ) : (
+                <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{collectionMap[block.collection].slice(0, block.limit || undefined).map((item: any) => <article class="card overflow-hidden"><div class="h-2 bg-primary"></div><div class="p-6"><h3 class="text-xl font-bold" data-editable="text" data-prop={`@file[/src/content/${block.collection === "runThaCityEvents" ? "run-tha-city-events" : "events"}/${item.id}.md].title`}>{item.data.title}</h3>{"description" in item.data && item.data.description && <p class="mt-2 text-muted-foreground" data-editable="text" data-prop={`@file[/src/content/${block.collection === "runThaCityEvents" ? "run-tha-city-events" : "events"}/${item.id}.md].description`}>{item.data.description}</p>}<div class="mt-4 space-y-2 text-sm text-muted-foreground"><p class="flex items-center gap-2"><Calendar class="h-4 w-4 text-primary" />{item.data.event_date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>{item.data.start_time && <p class="flex items-center gap-2"><Clock class="h-4 w-4 text-primary" /><span data-editable="text" data-prop={`@file[/src/content/${block.collection === "runThaCityEvents" ? "run-tha-city-events" : "events"}/${item.id}.md].start_time`}>{item.data.start_time}</span></p>}<p class="flex items-center gap-2"><MapPin class="h-4 w-4 text-primary" /><span>{item.data.meeting_point || item.data.location}</span></p></div></div></article>)}</div>
+              )}
+              {block.actions.length > 0 && <div class="mt-10 flex justify-center" data-editable="array" data-prop="actions">{block.actions.map((action: any) => <a href={action.url} class={buttonClass[action.style]} data-editable="array-item"><span data-editable="text" data-prop="label">{action.label}</span><ArrowRight class="h-4 w-4" /></a>)}</div>}
+            </div>
+          </div>
+        )}
+
+        {block._type === "practice_schedule" && (
+          <div class="py-16 lg:py-24"><div class="container"><div class="mx-auto mb-12 max-w-2xl text-center"><h2 class="text-3xl font-bold sm:text-4xl" data-editable="text" data-prop="title">{block.title}</h2><p class="mt-4 text-lg text-muted-foreground" data-editable="text" data-prop="subtitle">{block.subtitle}</p></div><div class="grid gap-6 lg:grid-cols-3" data-editable="array" data-prop="@data[practice-schedule].schedule">{practice.schedule.map((item) => <article class="card overflow-hidden" data-editable="array-item"><div class="h-2 bg-primary"></div><div class="p-6"><h3 class="text-xl font-bold" data-editable="text" data-prop="age_group">{item.age_group}</h3><div class="mt-4 space-y-3 text-sm text-muted-foreground"><p class="flex items-center gap-3"><Calendar class="h-5 w-5 text-primary" /><span data-editable="text" data-prop="days">{item.days}</span></p><p class="flex items-center gap-3"><Clock class="h-5 w-5 text-primary" /><span data-editable="text" data-prop="time">{item.time}</span></p><p class="flex items-center gap-3"><MapPin class="h-5 w-5 text-primary" /><span data-editable="text" data-prop="location">{item.location}</span></p></div><p class="mt-4 border-t border-border pt-4 text-sm text-muted-foreground"><strong class="text-foreground">Focus:</strong> <span data-editable="text" data-prop="focus">{item.focus}</span></p></div></article>)}</div></div></div>
+        )}
+
+        {block._type === "area_served" && (
+          <div class="bg-muted py-16 lg:py-20"><div class="container text-center">{block.eyebrow && <p class="mb-4 inline-flex items-center rounded-full bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary" data-editable="text" data-prop="eyebrow"><MapPin class="mr-2 h-4 w-4" />{block.eyebrow}</p>}<h2 class="text-3xl font-bold tracking-tight sm:text-4xl" data-editable="text" data-prop="title">{block.title}</h2><p class="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground" data-editable="text" data-prop="subtitle">{block.subtitle}</p><div class="mt-8 flex flex-wrap justify-center gap-2" data-editable="array" data-prop="@data[site].area_served">{site.area_served.map((area) => <span class="rounded-full border border-border bg-card px-3 py-1 text-sm font-semibold shadow-sm" data-editable="array-item"><span data-editable="text" data-prop="">{area}</span></span>)}</div></div></div>
+        )}
+
+        {block._type === "contact_forms" && (
+          <div class="py-16 lg:py-24"><div class="container grid gap-12 lg:grid-cols-2"><article class="card h-fit p-6"><h2 class="text-2xl font-bold" data-editable="text" data-prop="registration_title">{block.registration_title}</h2><p class="mt-2 text-muted-foreground" data-editable="text" data-prop="registration_description">{block.registration_description}</p><form method="post" action="https://example.com/replace-with-athlete-registration-endpoint" class="mt-6 space-y-4"><div class="grid gap-4 sm:grid-cols-2"><label> Athlete First Name *<input name="athlete_first_name" required class="mt-1 w-full rounded-md border border-border p-3" /></label><label> Athlete Last Name *<input name="athlete_last_name" required class="mt-1 w-full rounded-md border border-border p-3" /></label></div><div class="grid gap-4 sm:grid-cols-2"><label> Date of Birth *<input name="athlete_dob" type="date" required class="mt-1 w-full rounded-md border border-border p-3" /></label><label> Grade Level<input name="athlete_grade" class="mt-1 w-full rounded-md border border-border p-3" /></label></div><div class="grid gap-4 sm:grid-cols-2"><label> Parent First Name *<input name="parent_first_name" required class="mt-1 w-full rounded-md border border-border p-3" /></label><label> Parent Last Name *<input name="parent_last_name" required class="mt-1 w-full rounded-md border border-border p-3" /></label></div><div class="grid gap-4 sm:grid-cols-2"><label> Parent Email *<input name="parent_email" type="email" required class="mt-1 w-full rounded-md border border-border p-3" /></label><label> Parent Phone *<input name="parent_phone" type="tel" required class="mt-1 w-full rounded-md border border-border p-3" /></label></div><label class="block">Events of Interest<textarea name="preferred_events" rows="3" class="mt-1 w-full rounded-md border border-border p-3"></textarea></label><label class="block">Medical Conditions/Allergies<textarea name="medical_conditions" rows="3" class="mt-1 w-full rounded-md border border-border p-3"></textarea></label><button class="btn btn-accent w-full" type="submit">Submit Registration <Send class="h-4 w-4" /></button></form></article><div class="space-y-8"><article class="card p-6"><h2 class="text-2xl font-bold" data-editable="text" data-prop="contact_title">{block.contact_title}</h2><p class="mt-2 text-muted-foreground" data-editable="text" data-prop="contact_description">{block.contact_description}</p><form method="post" action="https://example.com/replace-with-contact-endpoint" class="mt-6 space-y-4"><label class="block">Name<input name="name" required class="mt-1 w-full rounded-md border border-border p-3" /></label><label class="block">Email<input name="email" type="email" required class="mt-1 w-full rounded-md border border-border p-3" /></label><label class="block">Subject<select name="subject" class="mt-1 w-full rounded-md border border-border p-3"><option>General Question</option><option>Registration Help</option><option>Volunteering</option><option>Sponsorship</option><option>Other</option></select></label><label class="block">Message<textarea name="message" required rows="4" class="mt-1 w-full rounded-md border border-border p-3"></textarea></label><button class="btn btn-primary w-full" type="submit">Send Message <Send class="h-4 w-4" /></button></form></article><article class="card p-6"><h2 class="text-xl font-bold">Contact Information</h2><div class="mt-4 space-y-4"><p class="flex gap-3"><MapPin class="h-5 w-5 text-primary" /><span><strong>Location</strong><br />Lansing, Michigan</span></p><p class="flex gap-3"><Mail class="h-5 w-5 text-primary" /><span><strong>Email</strong><br /><a href={`mailto:${site.email}`} class="text-primary" data-editable="text" data-prop="@data[site].email">{site.email}</a></span></p></div></article><article id="volunteer" class="card bg-primary p-6 text-primary-foreground"><CheckCircle class="mb-3 h-8 w-8 text-accent" /><h2 class="text-xl font-bold" data-editable="text" data-prop="volunteer_title">{block.volunteer_title}</h2><p class="mt-2 text-primary-foreground/80" data-editable="text" data-prop="volunteer_description">{block.volunteer_description}</p></article></div></div></div>
+        )}
+      </section>
+    ))}
+  </div>
+</BaseLayout>
